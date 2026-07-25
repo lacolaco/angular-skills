@@ -4,7 +4,13 @@ import path from 'node:path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_PATH = path.join(__dirname, '..', 'data', 'recommendations.json');
-const OUTPUT_DIR = path.join(__dirname, '..', 'references');
+const OUTPUT_DIR = path.join(
+  __dirname,
+  '..',
+  'skills',
+  'angular-update-guide',
+  'references',
+);
 
 interface Step {
   step: string;
