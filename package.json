@@ -1,0 +1,16 @@
+{
+  "name": "angular-skills",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "extract:local": "tsx tools/main.ts local",
+    "extract:github": "tsx tools/main.ts github",
+    "test": "tsx --test tools/*.test.ts",
+    "render": "tsx tools/render.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
