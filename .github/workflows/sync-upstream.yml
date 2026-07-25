@@ -1,0 +1,67 @@
+name: sync-upstream
+
+# angular/angular の Update Guide ソース (adev/src/app/features/update) を追跡し、
+# data/recommendations.json と skills/angular-update-guide/ を再生成する。
+# render は決定論的なので、差分が出た場合は上流が変わったことを意味する
+# (peter-evans/create-pull-request は差分なしのとき何もしない)。
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+        with:
+          version: '10'
+
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Fetch upstream and regenerate skill data
+        run: |
+          pnpm run extract:github
+          pnpm run render
+
+      - run: pnpm exec tsc --noEmit
+
+      - run: pnpm test
+
+      - name: Read upstream source
+        id: source
+        run: |
+          SHA=$(jq -r '.source.commitSha' data/recommendations.json)
+          echo "commit_sha=$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7.0.11
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: sync angular-update-guide from upstream'
+          title: 'chore: sync angular-update-guide from upstream'
+          body: |
+            Regenerated `data/recommendations.json` and `skills/angular-update-guide/` from the latest upstream commit touching `adev/src/app/features/update`.
+
+            Upstream commit: [`${{ steps.source.outputs.commit_sha }}`](https://github.com/angular/angular/commit/${{ steps.source.outputs.commit_sha }})
+          branch: chore/sync-upstream
+          delete-branch: true
+          add-paths: |
+            data/
+            skills/
