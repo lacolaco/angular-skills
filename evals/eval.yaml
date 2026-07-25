@@ -1,6 +1,6 @@
 # skillgrade evaluation for the angular-update-guide skill.
 #
-#   cd skills/angular-update-guide && skillgrade --ci
+#   cd evals && skillgrade --ci
 #
 # Each task hands the agent a project pinned to one Angular major and asks for
 # the breaking changes of the single step to the next major. Two things are
@@ -8,18 +8,26 @@
 # there, and whether items of the adjacent steps leaked in. The second is the
 # point of the skill's one-step-one-file shape — an agent that dumps all
 # sixteen reference files would satisfy the first check on its own.
+#
+# This directory sits outside `skills/` on purpose, for two reasons. `npx
+# skills add` copies a skill directory whole, so anything kept next to
+# SKILL.md ships to every consumer. And the runner copies this directory into
+# the workspace root, so a harness living inside the skill would also put
+# `references/` there — letting the agent read it without going through skill
+# discovery, which is the thing under test.
 
 version: "1"
 
-# The skill under test is this file's own directory.
-skill: .
+# The skill under test, relative to this file.
+skill: ../skills/angular-update-guide
 
 defaults:
   agent: claude
   # `local`, not `docker`: the claude adapter shells out to `claude -p`, which
   # authenticates through the Claude Code CLI on the host. A container has no
-  # credentials. The grader's `.claude/skills/...` path below is where the
-  # local provider injects the skill.
+  # credentials. The local provider copies this directory into the workspace
+  # root and injects the skill under `.claude/skills/`, which is where
+  # check.mjs looks for `references/`.
   provider: local
   trials: 15
   timeout: 600
@@ -27,28 +35,28 @@ defaults:
 
 tasks:
   - name: v21-to-v22
-    instruction: evals/instruction.md
+    instruction: instruction.md
     workspace:
-      - src: evals/fixtures/v21/package.json
+      - src: fixtures/v21/package.json.fixture
         dest: package.json
     graders:
       - type: deterministic
-        run: node .claude/skills/angular-update-guide/evals/check.mjs v21-to-v22 v20-to-v21
+        run: node graders/check.mjs v21-to-v22 v20-to-v21
 
   - name: v20-to-v21
-    instruction: evals/instruction.md
+    instruction: instruction.md
     workspace:
-      - src: evals/fixtures/v20/package.json
+      - src: fixtures/v20/package.json.fixture
         dest: package.json
     graders:
       - type: deterministic
-        run: node .claude/skills/angular-update-guide/evals/check.mjs v20-to-v21 v19-to-v20 v21-to-v22
+        run: node graders/check.mjs v20-to-v21 v19-to-v20 v21-to-v22
 
   - name: v8-to-v9
-    instruction: evals/instruction.md
+    instruction: instruction.md
     workspace:
-      - src: evals/fixtures/v8/package.json
+      - src: fixtures/v8/package.json.fixture
         dest: package.json
     graders:
       - type: deterministic
-        run: node .claude/skills/angular-update-guide/evals/check.mjs v8-to-v9 v7-to-v8 v9-to-v10
+        run: node graders/check.mjs v8-to-v9 v7-to-v8 v9-to-v10
