@@ -38,7 +38,6 @@ Skills land in `.agents/skills/`, with `.claude/skills/` symlinked to them so Cl
 skills/angular-update-guide/   what `npx skills add` installs — SKILL.md and references/
 tools/                         extraction and rendering
 data/                          intermediate JSON, committed so upstream diffs are readable
-evals/                         skillgrade harness — not distributed
 ```
 
 `tools/` reads the Update Guide sources out of angular/angular and writes both `data/recommendations.json` and the reference files. A daily workflow reruns it and opens a pull request when upstream has moved; rendering is deterministic, so a diff means the source changed.
@@ -49,22 +48,6 @@ pnpm run extract:github   # fetch upstream at a pinned commit and rebuild the in
 pnpm run render           # rewrite references/ and the generated regions of SKILL.md
 pnpm test
 ```
-
-## Evaluating the skill
-
-`evals/` holds a [skillgrade](https://github.com/mgechev/skillgrade) harness that checks whether an agent handed this skill produces the right answer. Each task pins a fixture project to one Angular major and asks for the breaking changes of the single step to the next one. Two things are graded: whether every item of that step is present, and whether items of the *adjacent* steps leaked in. The second is the point — an agent that reads all sixteen reference files would satisfy the first check on its own, so the leak check is what verifies the one-step-one-file shape.
-
-```sh
-cd evals
-skillgrade --eval=v8-to-v9 --trials=1   # single trial, for checking the harness
-skillgrade --ci                         # 3 tasks × 15 trials
-```
-
-Requires the Claude Code CLI on the host — the harness shells out to `claude -p`, which uses its local credentials. There is no API key to set, but a full run makes 45 agent calls.
-
-The harness lives outside `skills/` deliberately. `npx skills add` copies a skill directory whole, so anything kept next to `SKILL.md` ships to every consumer. It also keeps the measurement honest: skillgrade copies the eval directory into the workspace root, so a harness living inside the skill would put `references/` there too and let the agent read it without going through skill discovery — the very thing under test.
-
-Run it after editing `SKILL.md`. It is not wired into CI: the generated data changes daily, but the parts of the skill that decide behaviour do not.
 
 ## Opinionated choices
 
