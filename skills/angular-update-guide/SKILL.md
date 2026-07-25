@@ -3,7 +3,7 @@ name: angular-update-guide
 description: |
   Reference data for Angular major-version updates: the breaking changes and migration items for every major-to-major step from v6 to v22, generated from the official Angular Update Guide. Use when raising an Angular major version, when `ng update` crosses a major boundary, or when investigating what breaks between two Angular majors.
 
-  This is data, not a procedure. The `angular-update` skill owns *how* to run an update; this skill supplies *what* changes. When both apply, follow `angular-update` for the steps and read these files for the contents. A question that is only about the procedure does not need this skill.
+  This is data, not a procedure. It supplies *what* changes between two Angular majors, not *how* to carry out the update — pair it with whatever update procedure you already follow. A question that is only about the procedure does not need this skill.
 
   Do NOT use for non-Angular dependency updates, for minor/patch bumps, or for source edits that don't change the Angular version.
 

@@ -1,6 +1,6 @@
 # angular-skills
 
-[Claude Code](https://claude.com/claude-code) skills carrying Angular reference data. The reference material is generated from [angular/angular](https://github.com/angular/angular) sources, so an agent can read it directly instead of browsing the docs site.
+Agent skills carrying Angular reference data. The material is generated from [angular/angular](https://github.com/angular/angular) sources, so an agent can read it directly instead of browsing the docs site.
 
 **Unofficial.** This repository is not affiliated with, endorsed by, or supported by Google or the Angular team.
 
@@ -25,7 +25,9 @@ npx skills add lacolaco/angular-skills -g
 npx skills add lacolaco/angular-skills -s angular-update-guide
 ```
 
-Skills land in `.agents/skills/`, with `.claude/skills/` symlinked to them so Claude Code picks them up. `skills` records the install in `skills-lock.json` next to them; commit that lockfile so collaborators resolve the same content.
+Skills land in `.agents/skills/`, and the installer links them into whichever agent-specific directories your setup uses. The install is recorded in `skills-lock.json`; commit that lockfile so collaborators resolve the same content.
+
+Nothing here depends on the installer. Each skill is a directory of Markdown, so vendoring it by hand works just as well.
 
 ## Requirements
 
