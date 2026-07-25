@@ -1,0 +1,54 @@
+# skillgrade evaluation for the angular-update-guide skill.
+#
+#   cd skills/angular-update-guide && skillgrade --ci
+#
+# Each task hands the agent a project pinned to one Angular major and asks for
+# the breaking changes of the single step to the next major. Two things are
+# measured, both from the answer alone: whether every item of that step is
+# there, and whether items of the adjacent steps leaked in. The second is the
+# point of the skill's one-step-one-file shape — an agent that dumps all
+# sixteen reference files would satisfy the first check on its own.
+
+version: "1"
+
+# The skill under test is this file's own directory.
+skill: .
+
+defaults:
+  agent: claude
+  # `local`, not `docker`: the claude adapter shells out to `claude -p`, which
+  # authenticates through the Claude Code CLI on the host. A container has no
+  # credentials. The grader's `.claude/skills/...` path below is where the
+  # local provider injects the skill.
+  provider: local
+  trials: 15
+  timeout: 600
+  threshold: 0.9
+
+tasks:
+  - name: v21-to-v22
+    instruction: evals/instruction.md
+    workspace:
+      - src: evals/fixtures/v21/package.json
+        dest: package.json
+    graders:
+      - type: deterministic
+        run: node .claude/skills/angular-update-guide/evals/check.mjs v21-to-v22 v20-to-v21
+
+  - name: v20-to-v21
+    instruction: evals/instruction.md
+    workspace:
+      - src: evals/fixtures/v20/package.json
+        dest: package.json
+    graders:
+      - type: deterministic
+        run: node .claude/skills/angular-update-guide/evals/check.mjs v20-to-v21 v19-to-v20 v21-to-v22
+
+  - name: v8-to-v9
+    instruction: evals/instruction.md
+    workspace:
+      - src: evals/fixtures/v8/package.json
+        dest: package.json
+    graders:
+      - type: deterministic
+        run: node .claude/skills/angular-update-guide/evals/check.mjs v8-to-v9 v7-to-v8 v9-to-v10
