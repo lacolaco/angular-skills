@@ -2,6 +2,7 @@
   "name": "angular-skills",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "extract:local": "tsx tools/main.ts local",
     "extract:github": "tsx tools/main.ts github",
