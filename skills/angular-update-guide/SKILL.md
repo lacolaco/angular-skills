@@ -14,7 +14,7 @@ description: |
 
 **Unofficial.** This skill is not affiliated with, endorsed by, or supported by Google or the Angular team.
 
-The files under `references/` are generated from `adev/src/app/features/update/recommendations.ts` in [angular/angular](https://github.com/angular/angular) (MIT), commit `28d59e8d6357b6f5015657f06ecd7b543f00aba0`. The authoritative interactive version is [angular.dev/update-guide](https://angular.dev/update-guide).
+The files under `references/` are generated from `adev/src/app/features/update/recommendations.ts` in [angular/angular](https://github.com/angular/angular) (MIT), commit <!-- SOURCE:START -->`28d59e8d6357b6f5015657f06ecd7b543f00aba0`<!-- SOURCE:END -->. The authoritative interactive version is [angular.dev/update-guide](https://angular.dev/update-guide).
 
 ## How to use
 

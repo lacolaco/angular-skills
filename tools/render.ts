@@ -4,13 +4,9 @@ import path from 'node:path';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_PATH = path.join(__dirname, '..', 'data', 'recommendations.json');
-const OUTPUT_DIR = path.join(
-  __dirname,
-  '..',
-  'skills',
-  'angular-update-guide',
-  'references',
-);
+const SKILL_DIR = path.join(__dirname, '..', 'skills', 'angular-update-guide');
+const OUTPUT_DIR = path.join(SKILL_DIR, 'references');
+const SKILL_MD_PATH = path.join(SKILL_DIR, 'SKILL.md');
 
 interface Step {
   step: string;
@@ -23,7 +19,7 @@ interface Step {
   windows?: boolean;
 }
 
-interface Version {
+export interface Version {
   name: string;
   number: number;
 }
@@ -121,22 +117,67 @@ function renderStep(
   return parts.join('\n').trimEnd() + '\n';
 }
 
-function main() {
-  const data: RecommendationsData = JSON.parse(readFileSync(DATA_PATH, 'utf-8'));
+export interface MajorPair {
+  from: Version;
+  to: Version;
+}
 
+/** Adjacent `.0` version pairs from v6 onward. Shared by reference-file
+ * generation and the SKILL.md index, so both stay in sync by construction. */
+export function computeMajorPairs(versions: Version[]): MajorPair[] {
   // Only the `.0` entries mark a major version boundary.
-  const majorVersions = data.versions
+  const majorVersions = versions
     .filter((v) => v.number % 100 === 0)
     .sort((a, b) => a.number - b.number);
 
-  const maxVersionNumber = Math.max(...data.versions.map((v) => v.number));
-
-  const pairs: Array<{from: Version; to: Version}> = [];
+  const pairs: MajorPair[] = [];
   for (let i = 0; i < majorVersions.length - 1; i++) {
     const from = majorVersions[i];
     if (from.number < 600) continue;
     pairs.push({from, to: majorVersions[i + 1]});
   }
+  return pairs;
+}
+
+/** Bullet list of reference file paths, one per major pair, for the
+ * "Available references" section of SKILL.md. */
+export function renderReferenceIndex(versions: Version[]): string {
+  return computeMajorPairs(versions)
+    .map(({from, to}) => {
+      const fromMajor = Math.floor(from.number / 100);
+      const toMajor = Math.floor(to.number / 100);
+      return `- \`references/v${fromMajor}-to-v${toMajor}.md\``;
+    })
+    .join('\n');
+}
+
+/** Replaces the text strictly between `<!-- {marker}:START -->` and
+ * `<!-- {marker}:END -->` (markers themselves are kept). */
+export function replaceBetweenMarkers(content: string, marker: string, replacement: string): string {
+  const start = `<!-- ${marker}:START -->`;
+  const end = `<!-- ${marker}:END -->`;
+  const startIdx = content.indexOf(start);
+  const endIdx = content.indexOf(end);
+  if (startIdx === -1 || endIdx === -1) {
+    throw new Error(`missing ${marker} markers in SKILL.md`);
+  }
+  return content.slice(0, startIdx + start.length) + replacement + content.slice(endIdx);
+}
+
+/** Rewrites the generated parts of SKILL.md: the reference index and the
+ * upstream commit SHA. Everything outside the marker pairs is untouched. */
+export function updateSkillMd(skillMdContent: string, versions: Version[], commitSha: string): string {
+  let content = skillMdContent;
+  content = replaceBetweenMarkers(content, 'REFERENCES', `\n${renderReferenceIndex(versions)}\n`);
+  content = replaceBetweenMarkers(content, 'SOURCE', `\`${commitSha}\``);
+  return content;
+}
+
+function main() {
+  const data: RecommendationsData = JSON.parse(readFileSync(DATA_PATH, 'utf-8'));
+
+  const pairs = computeMajorPairs(data.versions);
+  const maxVersionNumber = Math.max(...data.versions.map((v) => v.number));
 
   mkdirSync(OUTPUT_DIR, {recursive: true});
 
@@ -147,7 +188,14 @@ function main() {
     writeFileSync(outputPath, renderStep(data, from, to, to.number === maxVersionNumber), 'utf-8');
   }
 
+  const skillMdContent = readFileSync(SKILL_MD_PATH, 'utf-8');
+  writeFileSync(SKILL_MD_PATH, updateSkillMd(skillMdContent, data.versions, data.source.commitSha), 'utf-8');
+
   console.log(`wrote ${pairs.length} reference files to ${OUTPUT_DIR}`);
+  console.log(`updated ${SKILL_MD_PATH}`);
 }
 
-main();
+const isMain = process.argv[1] === fileURLToPath(import.meta.url);
+if (isMain) {
+  main();
+}
