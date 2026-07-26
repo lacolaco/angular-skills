@@ -8,7 +8,7 @@ Agent skills for working with Angular. These do not replace the official [`angul
 
 ## Skills
 
-- **`angular-update-guide`** — Breaking changes and migration items for every Angular major-to-major step from v6 to v22, generated from the [Angular Update Guide](https://angular.dev/update-guide) data in [angular/angular](https://github.com/angular/angular) so an agent can read it directly instead of browsing the docs site. Reference data only; it does not describe how to run the update.
+- **`angular-update-guide`**: Breaking changes and migration items for every Angular major-to-major step from v6 to v22, generated from the [Angular Update Guide](https://angular.dev/update-guide) data in [angular/angular](https://github.com/angular/angular) so an agent can read it directly instead of browsing the docs site. Reference data only; it does not describe how to run the update.
 
 ## Install
 
@@ -39,7 +39,7 @@ Reference data is also useful before committing to anything:
 
 **Opinionated choices**
 
-- **Versions older than v6 are out of scope.** Upstream draws the same boundary — the Update Guide hands anything below v6 to `renderPreV6Instructions()` instead of the recommendation list.
+- **Versions older than v6 are out of scope.** Upstream draws the same boundary: the Update Guide hands anything below v6 to `renderPreV6Instructions()` instead of the recommendation list.
 - **No complexity level.** `Basic` / `Medium` / `Advanced` is a dial for how many items to put in front of a human at once, and an agent reading the whole file has no such limit. Kept as an attribute, it would serve only as grounds for dropping items upstream still counts as part of the update.
 - **No pre-filtering by option.** The Angular Material, ngUpgrade, and Windows conditions stay on the items. Which ones apply is decided by reading the target project's `package.json`, source, and platform, which is more accurate than a filter set in advance.
 
@@ -51,14 +51,14 @@ Reference data is also useful before committing to anything:
 ## Repository layout
 
 ```
-skills/<name>/         what `npx skills add` installs — SKILL.md and any files beside it
+skills/<name>/         what `npx skills add` installs: SKILL.md and any files beside it
 tools/<name>/          the build for that skill, when it has one
 upstream/angular/      git submodule pinned to angular/angular, read by builds that need upstream sources
 ```
 
 Everything that belongs to one skill is scoped under its name, so a second skill can be added without disturbing the first.
 
-`upstream/angular` is a git submodule pinned to a specific angular/angular commit — the repository declares exactly which upstream commit the generated files were built from. It's checked out sparse (only `adev/src/app/features/update`) since angular/angular is a large monorepo; see `.gitmodules`.
+`upstream/angular` is a git submodule pinned to a specific angular/angular commit. The repository declares exactly which upstream commit the generated files were built from. It's checked out sparse (only `adev/src/app/features/update`) since angular/angular is a large monorepo; see `.gitmodules`.
 
 `angular-update-guide`'s build reads the Update Guide sources out of the submodule and writes its reference files in one pass. A daily workflow advances the submodule, rebuilds, and opens a pull request only when the references actually change; the build is deterministic, so a diff means upstream moved.
 
