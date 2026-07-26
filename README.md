@@ -37,21 +37,22 @@ Nothing here depends on the installer. Each skill is a plain directory (`SKILL.m
 ## Repository layout
 
 ```
-skills/angular-update-guide/   what `npx skills add` installs — SKILL.md and references/
-tools/                         extraction and rendering
-data/                          intermediate JSON, committed so upstream diffs are readable
-upstream/angular/              git submodule pinned to angular/angular, source of the extraction
+skills/<name>/         what `npx skills add` installs — SKILL.md and references/
+tools/<name>/          the build for that skill
+upstream/angular/      git submodule pinned to angular/angular, shared by Angular skills
 ```
+
+Everything that belongs to one skill is scoped under its name, so a second skill can be added without disturbing the first.
 
 `upstream/angular` is a git submodule pinned to a specific angular/angular commit — the repository declares exactly which upstream commit it was built from. It's checked out sparse (only `adev/src/app/features/update`) since angular/angular is a large monorepo; see `.gitmodules`.
 
-`tools/` reads the Update Guide sources out of the submodule and writes both `data/recommendations.json` and the reference files. A daily workflow advances the submodule and opens a pull request when upstream has moved; rendering is deterministic, so a diff means the source changed.
+A skill's build reads the Update Guide sources out of the submodule and writes its reference files, by way of an intermediate JSON under `data/` that is a build artifact and stays out of git. A daily workflow advances the submodule, regenerates, and opens a pull request only when the references actually change; rendering is deterministic, so a diff means upstream moved.
 
 ```sh
-git submodule update --init   # first time only, populates upstream/angular
+git submodule update --init                # first time only, populates upstream/angular
 pnpm install
-pnpm run extract              # read the submodule and rebuild the intermediate JSON
-pnpm run render               # rewrite references/ and the generated regions of SKILL.md
+pnpm run extract:angular-update-guide      # read the submodule, rebuild the intermediate JSON
+pnpm run render:angular-update-guide       # rewrite references/ and the generated regions of SKILL.md
 pnpm test
 ```
 

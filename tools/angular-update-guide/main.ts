@@ -1,17 +1,18 @@
 import {execFileSync} from 'node:child_process';
-import {readFileSync, writeFileSync} from 'node:fs';
+import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 
 import {extractRecommendations, extractVersions} from './extract.js';
 
+const SKILL = 'angular-update-guide';
 const REPO = 'angular/angular';
 const SUBMODULE_RELATIVE_PATH = 'adev/src/app/features/update';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.join(__dirname, '..');
+const REPO_ROOT = path.join(__dirname, '..', '..');
 const SUBMODULE_PATH = path.join(REPO_ROOT, 'upstream', 'angular');
-const OUTPUT_PATH = path.join(REPO_ROOT, 'data', 'recommendations.json');
+const OUTPUT_PATH = path.join(REPO_ROOT, 'data', SKILL, 'recommendations.json');
 
 async function main() {
   const commitSha = execFileSync('git', ['-C', SUBMODULE_PATH, 'rev-parse', 'HEAD'], {
@@ -37,6 +38,9 @@ async function main() {
     versions,
   };
 
+  // The intermediate JSON is a build artifact and is not tracked, so its
+  // directory is absent on a fresh clone.
+  mkdirSync(path.dirname(OUTPUT_PATH), {recursive: true});
   writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2) + '\n', 'utf-8');
   console.log(`wrote ${recommendations.length} recommendations, ${versions.length} versions`);
   console.log(`source: ${JSON.stringify(output.source)}`);

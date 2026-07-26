@@ -4,9 +4,9 @@
   "type": "module",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "extract": "tsx tools/main.ts",
-    "render": "tsx tools/render.ts",
-    "test": "tsx --test tools/*.test.ts"
+    "extract:angular-update-guide": "tsx tools/angular-update-guide/main.ts",
+    "render:angular-update-guide": "tsx tools/angular-update-guide/render.ts",
+    "test": "tsx --test tools/**/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

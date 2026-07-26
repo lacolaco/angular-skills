@@ -2,9 +2,12 @@ import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 
+const SKILL = 'angular-update-guide';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_PATH = path.join(__dirname, '..', 'data', 'recommendations.json');
-const SKILL_DIR = path.join(__dirname, '..', 'skills', 'angular-update-guide');
+const REPO_ROOT = path.join(__dirname, '..', '..');
+const DATA_PATH = path.join(REPO_ROOT, 'data', SKILL, 'recommendations.json');
+const SKILL_DIR = path.join(REPO_ROOT, 'skills', SKILL);
 const OUTPUT_DIR = path.join(SKILL_DIR, 'references');
 const SKILL_MD_PATH = path.join(SKILL_DIR, 'SKILL.md');
 
