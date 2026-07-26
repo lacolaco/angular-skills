@@ -29,6 +29,22 @@ Skills land in `.agents/skills/`, and the installer links them into whichever ag
 
 Nothing here depends on the installer. Each skill is a plain directory (`SKILL.md` plus `references/`), so vendoring it by hand works just as well.
 
+## Asking for an upgrade
+
+The skill carries what changes, not how to change it, so it does its work inside whatever you were already going to ask. Nothing needs to name it:
+
+> Upgrade this project to Angular 21.
+
+> We're on v18 and want to get to v21. Walk me through it one major at a time, and tell me what breaks at each step.
+
+Reference data is also useful before committing to anything:
+
+> What breaks between Angular 20 and 21 for this codebase? Don't change anything yet — I want to see the list first, including the items that only matter for Angular Material.
+
+The last one is worth knowing about. The reference files are not filtered by complexity level or by conditions like Angular Material, ngUpgrade, or Windows: every item is present, and the agent decides what applies by reading your project. So you can ask it to widen or narrow — *include everything, even the obscure ones* — and there is something behind the request.
+
+If the agent is going to run the upgrade rather than just describe it, pair this with whatever procedure you already trust for `ng update`. That part is deliberately not here.
+
 ## Requirements
 
 - Nothing at the install site. The skills are plain text files with no runtime dependency.
