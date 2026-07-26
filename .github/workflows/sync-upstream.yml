@@ -50,21 +50,34 @@ jobs:
           git submodule absorbgitdirs upstream/angular
 
       - name: Regenerate skill data
+        id: regen
         run: |
           pnpm run extract
           pnpm run render
+          # The submodule now points at upstream HEAD, which moves whenever
+          # angular/angular does — far more often than the Update Guide data
+          # changes. Advancing the pointer on its own would open a pull
+          # request most days with nothing to review, so the pointer only
+          # travels when regeneration actually produced something different.
+          if git diff --quiet -- data skills; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - run: pnpm exec tsc --noEmit
 
       - run: pnpm test
 
       - name: Read upstream source
+        if: steps.regen.outputs.changed == 'true'
         id: source
         run: |
           SHA=$(jq -r '.source.commitSha' data/recommendations.json)
           echo "commit_sha=$SHA" >> "$GITHUB_OUTPUT"
 
       - name: Create Pull Request
+        if: steps.regen.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7.0.11
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
