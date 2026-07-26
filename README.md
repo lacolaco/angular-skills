@@ -74,7 +74,8 @@ pnpm test
 ## Opinionated choices
 
 - **`angular-update-guide` leaves out versions older than v6.** Upstream draws the same boundary — the Update Guide hands anything below v6 to `renderPreV6Instructions()` instead of the recommendation list.
-- **`angular-update-guide` does not pre-filter by level or options.** Upstream's UI lets a human pick a complexity level and toggle Angular Material / ngUpgrade / Windows. The generated files keep every item, because an agent can read the target project's `package.json`, source, and platform and decide what applies more accurately than a filter set in advance.
+- **`angular-update-guide` drops upstream's complexity level.** `Basic` / `Medium` / `Advanced` is a dial for how many items to put in front of a human at once, and an agent reading the whole file has no such limit. Kept as an attribute, it would serve only as grounds for dropping items upstream still counts as part of the update.
+- **`angular-update-guide` does not pre-filter by option.** The Angular Material, ngUpgrade, and Windows conditions stay on the items. Which ones apply is decided by reading the target project's `package.json`, source, and platform, which is more accurate than a filter set in advance.
 
 ## License
 

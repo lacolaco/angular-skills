@@ -84,7 +84,8 @@ pnpm test
 ## 設計上の選択
 
 - **`angular-update-guide` は v6 より前からの更新を対象にしていません。** 上流も同じ境界を引いています。Update Guide は v6 未満を推奨項目の一覧ではなく `renderPreV6Instructions()` に渡しています。
-- **`angular-update-guide` はレベルやオプションによる事前の絞り込みをしません。** 上流の UI は、人間が複雑度レベルを選び、Angular Material、ngUpgrade、Windows を切り替える形です。生成ファイルは全項目を保持します。対象プロジェクトの `package.json`、ソース、実行環境を読めるエージェントのほうが、あらかじめ設定したフィルタより正確に判断できるからです。
+- **`angular-update-guide` は複雑度レベルを持ちません。** 上流の `Basic` / `Medium` / `Advanced` は、一度に人間の前へ出す項目数を抑えるための目盛りです。ファイル全体を読むエージェントにその制約はありません。属性として残しても、上流が更新の一部と見なしている項目を落とす根拠に使われるだけなので、生成時に捨てています。
+- **`angular-update-guide` はオプション条件で事前に絞り込みません。** Angular Material、ngUpgrade、Windows の条件は属性として項目に残します。どれが該当するかは、対象プロジェクトの `package.json`、ソース、実行環境を読んで判断します。あらかじめ設定したフィルタより正確だからです。
 
 ## ライセンス
 

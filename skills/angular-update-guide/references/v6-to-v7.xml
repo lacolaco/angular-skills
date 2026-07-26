@@ -1,44 +1,44 @@
 <update-guide from="6.0" to="7.0">
-  <step id="Renderer" level="Advanced" phase="before">
+  <step id="Renderer" phase="before">
     Anywhere you use Renderer, now use Renderer2
   </step>
-  <step id="Http" level="Basic" phase="before">
+  <step id="Http" phase="before">
     If you use the legacy `HttpModule` and the `Http` service, switch to `HttpClientModule` and the `HttpClient` service. HttpClient simplifies the default ergonomics (you don't need to map to JSON anymore) and now supports typed return values and interceptors. Read more on [angular.dev](https://angular.dev/guide/http).
   </step>
-  <step id="ngModel on form control" level="Advanced" phase="before">
+  <step id="ngModel on form control" phase="before">
     Support for using the ngModel input property and ngModelChange event with reactive form directives has been deprecated in v6 and removed in v7.
   </step>
-  <step id="update to RxJS 6" level="Basic" phase="before">
+  <step id="update to RxJS 6" phase="before">
     Remove deprecated RxJS 5 features using [rxjs-tslint auto update rules](https://github.com/ReactiveX/rxjs-tslint)&lt;br/&gt;&lt;br/&gt;For most applications this will mean running the following two commands:&lt;br/&gt;&lt;br/&gt;`npx rxjs-tslint`&lt;br/&gt;`rxjs-5-to-6-migrate -p src/tsconfig.app.json`
   </step>
-  <step id="remove rxjs-compat" level="Medium" phase="before">
+  <step id="remove rxjs-compat" phase="before">
     Once you and all of your dependencies have updated to RxJS 6, remove `rxjs-compat`.
   </step>
-  <step id="TypeScript 3.1" level="Basic" phase="during">
+  <step id="TypeScript 3.1" phase="during">
     Angular now uses TypeScript 3.1, read more about [any potential breaking changes](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-1.html).
   </step>
-  <step id="Node 10" level="Basic" phase="during">
+  <step id="Node 10" phase="during">
     Angular has now added support for [Node 10](https://nodejs.org/en/blog/release/v10.0.0/).
   </step>
-  <step id="v7 update" level="Basic" phase="during" windows="false">
+  <step id="v7 update" phase="during" windows="false">
     Update to v7 of the core framework and CLI by running `NG_DISABLE_VERSION_CHECK=1 npx @angular/cli@7 update @angular/cli@7 @angular/core@7` in your terminal.
   </step>
-  <step id="v7 update" level="Basic" phase="during" windows="true">
+  <step id="v7 update" phase="during" windows="true">
     Update to v7 of the core framework and CLI by running `cmd /C "set "NG_DISABLE_VERSION_CHECK=1" &amp;&amp; npx @angular/cli@7 update @angular/cli@7 @angular/core@7"` in your terminal.
   </step>
-  <step id="v7 material update" level="Basic" phase="during" material="true" windows="false">
+  <step id="v7 material update" phase="during" material="true" windows="false">
     Update Angular Material to v7 by running `NG_DISABLE_VERSION_CHECK=1 npx @angular/cli@7 update @angular/material@7` in your terminal. You should test your application for sizing and layout changes.
   </step>
-  <step id="v7 material update" level="Basic" phase="during" material="true" windows="true">
+  <step id="v7 material update" phase="during" material="true" windows="true">
     Update Angular Material to v7 by running `cmd /C "set "NG_DISABLE_VERSION_CHECK=1" &amp;&amp; npx @angular/cli@7 update @angular/material@7"` in your terminal. You should test your application for sizing and layout changes.
   </step>
-  <step id="v7 material changes" level="Medium" phase="during" material="true">
+  <step id="v7 material changes" phase="during" material="true">
     If you use screenshot tests, you'll need to regenerate your screenshot golden files as many minor visual tweaks have landed.
   </step>
-  <step id="use files instead of versionedFiles" level="Medium" phase="after">
+  <step id="use files instead of versionedFiles" phase="after">
     If you use the Angular Service worker, migrate any `versionedFiles` to the `files` array. The behavior is the same.
   </step>
-  <step id="v7 material deprecations" level="Advanced" phase="after" material="true">
+  <step id="v7 material deprecations" phase="after" material="true">
     Stop using `matRippleSpeedFactor` and `baseSpeedFactor` for ripples, using Animation config instead.
   </step>
 </update-guide>

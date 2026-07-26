@@ -21,7 +21,7 @@ The files under `references/` are generated from `adev/src/app/features/update/r
 1. Read `@angular/core` in the project's `package.json` to determine the current major version.
 2. Determine which conditions the project meets, so that conditional items can be resolved without asking: `@angular/material` in its dependencies, `@angular/upgrade` for ngUpgrade, and whether the host platform is Windows.
 3. Plan **one major at a time**. Upstream: "You can't run `ng update` to update Angular applications more than one major version at a time." Going from v16 to v19 is three separate steps, each with its own reference file.
-4. For each step, read `references/v{N}-to-v{N+1}.xml` and decide what applies. Items carrying no condition attribute apply to every project. Beyond that, **keep an item unless you can say why it is 100% irrelevant to this project.** A condition the project does not meet is such a reason. `level` is never one, and neither is a change looking too small to matter. Where the call is not clear-cut, keep the item and present it as one that may apply. Report a dropped item only if asked for the full list.
+4. For each step, read `references/v{N}-to-v{N+1}.xml` and decide what applies. Items carrying no condition attribute apply to every project. Beyond that, **keep an item unless you can say why it is 100% irrelevant to this project.** A condition the project does not meet is such a reason; a change looking too small to matter is not. Where the call is not clear-cut, keep the item and present it as one that may apply. Report a dropped item only if asked for the full list.
 
 Each file is an `<update-guide>` document; each item is a `<step>` element. Its `phase` attribute (`before` / `during` / `after`) says when it applies, in that document order. Its `id` attribute is upstream's identifier for it — use it when referring to a specific item.
 
@@ -31,15 +31,15 @@ Each file is an `<update-guide>` document; each item is a `<step>` element. Its 
     Plans for releases after the current major release are not finalized and may change. ...
   </unreleased-warning>
 
-  <step id="22.0.0_ng_update" level="Basic" phase="during">
+  <step id="22.0.0_ng_update" phase="during">
     In the application's project directory, run `ng update @angular/core@22 @angular/cli@22` ...
   </step>
 
-  <step id="update @angular/material" level="Basic" phase="during" material="true">
+  <step id="update @angular/material" phase="during" material="true">
     Run `ng update @angular/material@22`.
   </step>
 
-  <step id="v8 update" level="Basic" phase="during" windows="false">
+  <step id="v8 update" phase="during" windows="false">
     Update Angular Material to version 8 by running `NG_DISABLE_VERSION_CHECK=1 npx ...` in your terminal.
   </step>
 </update-guide>
@@ -49,17 +49,11 @@ A step's text is upstream's own wording, carried over verbatim; it may contain M
 
 ## Attributes
 
-`level` is upstream's vocabulary. It is **a dial for how much detail to show, not a measure of how hard the work is**:
-
-- `Basic` — "Shows information for all Angular developers."
-- `Medium` — "Shows information that's of interest to more advanced Angular developers."
-- `Advanced` — "Shows all the information we have about this update."
-
-So `level="Basic"` means *everyone needs to see this*, not *this is easy*. A `Basic` item can be a large migration, and an `Advanced` item can be a one-line change that happens to affect few projects. Because the level says nothing about whether an item applies to a given project, it is never grounds for dropping one: a `Medium` or `Advanced` item whose relevance is uncertain stays in, listed as a change that may affect the project.
+Upstream tags each item with a complexity level (`Basic` / `Medium` / `Advanced`), which these files do not carry. That level is a dial for how much detail to put in front of a human at once, not a statement about whether an item applies. Every item upstream has for a version pair is here, in upstream's order.
 
 `ngUpgrade`, `material`, and `windows` mark items that apply only under a condition; they're absent otherwise. `windows` is the exception where the negative case is also written out: `windows="true"` applies only on Windows, `windows="false"` applies only on platforms other than Windows (the same instruction often appears twice, once per value, with different shell syntax).
 
-**These files are not pre-filtered.** Every item is present at every level and for every option; deciding what applies is the job of steps 2 and 4, resolved against the project itself rather than an assumption about which items matter.
+**These files are not pre-filtered.** Every item is present for every option; deciding what applies is the job of steps 2 and 4, resolved against the project itself rather than an assumption about which items matter.
 
 ## Available references
 

@@ -1,65 +1,65 @@
 <update-guide from="20.0" to="21.0">
-  <step id="21.0.0_ng_update" level="Basic" phase="during">
+  <step id="21.0.0_ng_update" phase="during">
     In the application's project directory, run `ng update @angular/core@21 @angular/cli@21` to update your application to Angular v21.
   </step>
-  <step id="update @angular/material" level="Basic" phase="during" material="true">
+  <step id="update @angular/material" phase="during" material="true">
     Run `ng update @angular/material@21`.
   </step>
-  <step id="21.0.0-update-signal-input-access-in-custom-elements" level="Advanced" phase="during">
+  <step id="21.0.0-update-signal-input-access-in-custom-elements" phase="during">
     When using signal inputs with Angular custom elements, update property access to be direct (`elementRef.newInput`) instead of a function call (`elementRef.newInput()`) to align with the behavior of decorator-based inputs.
   </step>
-  <step id="21.0.0-zone-scheduler-behavior-change" level="Advanced" phase="during">
+  <step id="21.0.0-zone-scheduler-behavior-change" phase="during">
     If using `provideZoneChangeDetection` without the ZoneJS polyfill, note that the internal scheduler is now always enabled. Review your app's timing as this may alter behavior that previously relied on the disabled scheduler.
   </step>
-  <step id="21.0.0-provide-zone-change-detection-required" level="Basic" phase="during">
+  <step id="21.0.0-provide-zone-change-detection-required" phase="during">
     Zone-based applications should add `provideZoneChangeDetection()` to your application's root providers. For standalone apps, add it to the `bootstrapApplication` call. For NgModule-based apps, add it to your root `AppModule`'s `providers` array. An automated migration should handle this.
   </step>
-  <step id="21.0.0-remove-interpolation-option" level="Advanced" phase="during">
+  <step id="21.0.0-remove-interpolation-option" phase="during">
     Remove the 'interpolation' property from your @Component decorators. Angular now only supports the default '{{' and '}}' interpolation markers.
   </step>
-  <step id="21.0.0-remove-moduleid-property" level="Medium" phase="during">
+  <step id="21.0.0-remove-moduleid-property" phase="during">
     Remove the 'moduleId' property from your @Component decorators. This property was used for resolving relative URLs for templates and styles, a functionality now handled by modern build tools.
   </step>
-  <step id="21.0.0-ng-component-outlet-content-type-change" level="Medium" phase="during">
+  <step id="21.0.0-ng-component-outlet-content-type-change" phase="during">
     The `ngComponentOutletContent` input has been strictly typed from `any[][]` to `Node[][]`. Update the value you pass to this input to match the new `Node[][] | undefined` type.
   </step>
-  <step id="21.0.0-stricter-host-binding-type-checking" level="Basic" phase="during">
+  <step id="21.0.0-stricter-host-binding-type-checking" phase="during">
     Host binding type checking is now enabled by default and may surface new build errors. Resolve any new type errors or set `typeCheckHostBindings: false` in your `tsconfig.json`'s `angularCompilerOptions`.
   </step>
-  <step id="21.0.0-typescript-5.9-required" level="Basic" phase="during">
+  <step id="21.0.0-typescript-5.9-required" phase="during">
     Update your project's TypeScript version to 5.9 or later. The `ng update` command will typically handle this automatically.
   </step>
-  <step id="21.0.0-remove-application-config-from-platform-browser" level="Medium" phase="during">
+  <step id="21.0.0-remove-application-config-from-platform-browser" phase="during">
     The `ApplicationConfig` export from `@angular/platform-browser` has been removed. Update your imports to use `ApplicationConfig` from `@angular/core` instead.
   </step>
-  <step id="21.0.0-remove-ignore-changes-outside-zone-option" level="Advanced" phase="during">
+  <step id="21.0.0-remove-ignore-changes-outside-zone-option" phase="during">
     The `ignoreChangesOutsideZone` option for configuring ZoneJS is no longer available. Remove this option from your ZoneJS configuration in your polyfills file.
   </step>
-  <step id="21.0.0-testbed-rethrows-errors-with-provideZoneChangeDetection" level="Medium" phase="during">
+  <step id="21.0.0-testbed-rethrows-errors-with-provideZoneChangeDetection" phase="during">
     Update tests using `provideZoneChangeDetection` as TestBed now rethrows errors. Fix the underlying issues in your tests or, as a last resort, configure TestBed with `rethrowApplicationErrors: false` to disable this behavior.
   </step>
-  <step id="21.0.0-router-navigation-timing-changed" level="Medium" phase="during">
+  <step id="21.0.0-router-navigation-timing-changed" phase="during">
     Update tests that rely on router navigation timing. Navigations may now take additional microtasks to complete. Ensure navigations are fully completed before making assertions, for example by using `fakeAsync` with `flush` or waiting for promises/observables to resolve.
   </step>
-  <step id="21.0.0-test-bed-provides-fake-platform-location" level="Medium" phase="during">
+  <step id="21.0.0-test-bed-provides-fake-platform-location" phase="during">
     Tests using `TestBed` might be affected by the new fake `PlatformLocation`. If your tests fail, provide the old `MockPlatformLocation` from `@angular/common/testing` via `{provide: PlatformLocation, useClass: MockPlatformLocation}` in your `TestBed` configuration.
   </step>
-  <step id="21.0.0-remove-upgrade-adapter" level="Advanced" phase="during">
+  <step id="21.0.0-remove-upgrade-adapter" phase="during">
     The `UpgradeAdapter` has been removed. Update your hybrid Angular/AngularJS application to use the static APIs from the `@angular/upgrade/static` package instead.
   </step>
-  <step id="21.0.0-form-array-directive-conflict" level="Medium" phase="during">
+  <step id="21.0.0-form-array-directive-conflict" phase="during">
     The new standalone `formArray` directive might conflict with existing custom directives or inputs. Rename any custom directives named `FormArray` or inputs named `formArray` on elements that also use reactive forms to resolve the conflict.
   </step>
-  <step id="21.0.0-ngmodulefactory-removed" level="Advanced" phase="during">
+  <step id="21.0.0-ngmodulefactory-removed" phase="during">
     The deprecated `NgModuleFactory` has been removed. Update any code that uses `NgModuleFactory` to use `NgModule` directly, which is common in dynamic component loading scenarios.
   </step>
-  <step id="21.0.0-emit-declaration-only-not-supported" level="Advanced" phase="during">
+  <step id="21.0.0-emit-declaration-only-not-supported" phase="during">
     The `emitDeclarationOnly` TypeScript compiler option is not supported. Please disable it in your `tsconfig.json` file to allow the Angular compiler to function correctly.
   </step>
-  <step id="21.0.0-lastsuccessfulnavigation-is-a-signal" level="Medium" phase="during">
+  <step id="21.0.0-lastsuccessfulnavigation-is-a-signal" phase="during">
     The `lastSuccessfulNavigation` property on the Router has been converted to a signal. To get its value, you now need to invoke it as a function: `router.lastSuccessfulNavigation()`.
   </step>
-  <step id="21.0.0-configure-commonengine-allowed-hosts" level="Medium" phase="during">
+  <step id="21.0.0-configure-commonengine-allowed-hosts" phase="during">
     Starting `@angular/ssr` 21.1.5, if your application uses SSR with `CommonEngine`, set the `allowedHosts` option in your `server.ts` (for example, `new CommonEngine({allowedHosts: ['localhost', '*.yourdomain.com']})`). Without it, SSR silently falls back to client-side rendering. This requirement comes from security advisory [GHSA-x288-3778-4hhx](https://github.com/angular/angular-cli/security/advisories/GHSA-x288-3778-4hhx) (also backported to 20.3.17 and 19.2.21).
   </step>
 </update-guide>

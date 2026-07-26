@@ -34,10 +34,6 @@ export interface RecommendationsData {
   versions: Version[];
 }
 
-// Mirrors ApplicationComplexity's names, see update.component.ts
-// `getComplexityLevelName`.
-const LEVEL_NAMES: Record<number, string> = {1: 'Basic', 2: 'Medium', 3: 'Advanced'};
-
 const UNRELEASED_WARNING =
   'Plans for releases after the current major release are not finalized and may change. ' +
   'These recommendations are based on scheduled deprecations.';
@@ -54,15 +50,13 @@ function escapeAttr(text: string): string {
 
 type Phase = 'before' | 'during' | 'after';
 
-/** Attribute order: id, level, phase, then option attributes in Step field order.
+/** Attribute order: id, phase, then option attributes in Step field order.
  * An option attribute is omitted unless it's meaningful — `windows` is the one
- * exception, since `windows="false"` (non-Windows only) is itself information. */
+ * exception, since `windows="false"` (non-Windows only) is itself information.
+ *
+ * Upstream's `level` is deliberately not rendered; see `classify()`. */
 function renderStepElement(step: Step, phase: Phase): string {
-  const attrs = [
-    `id="${escapeAttr(step.step)}"`,
-    `level="${LEVEL_NAMES[step.level]}"`,
-    `phase="${phase}"`,
-  ];
+  const attrs = [`id="${escapeAttr(step.step)}"`, `phase="${phase}"`];
   if (step.ngUpgrade === true) attrs.push('ngUpgrade="true"');
   if (step.material === true) attrs.push('material="true"');
   if (step.windows === true) attrs.push('windows="true"');
@@ -76,8 +70,14 @@ interface Bucketed {
   after: Step[];
 }
 
-/** Faithful port of update.component.ts `showUpdatePath()` bucketing, minus
- * the level/options filter (we render all levels and options here). */
+/** Faithful port of update.component.ts `showUpdatePath()` bucketing, minus its
+ * level/options filter.
+ *
+ * Options are kept as attributes so they can be resolved against the project.
+ * `level` is dropped instead: it exists to keep the guide's item count within
+ * what a human wants to read at once, and an agent reading the whole file has
+ * no such limit. Emitting it would only invite dropping items that upstream
+ * still considers part of the update. */
 function classify(recommendations: Step[], from: number, to: number): Bucketed {
   const before: Step[] = [];
   const during: Step[] = [];

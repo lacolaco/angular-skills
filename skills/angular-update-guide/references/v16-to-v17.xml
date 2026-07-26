@@ -1,50 +1,50 @@
 <update-guide from="16.0" to="17.0">
-  <step id="v17 node support" level="Basic" phase="during">
+  <step id="v17 node support" phase="during">
     Make sure that you are using a supported version of node.js before you upgrade your application. Angular v17 supports node.js versions: v18.13.0 and newer
   </step>
-  <step id="v17 ts support" level="Basic" phase="during">
+  <step id="v17 ts support" phase="during">
     Make sure that you are using a supported version of TypeScript before you upgrade your application. Angular v17 supports TypeScript version 5.2 or later.
   </step>
-  <step id="v17 zone.js support" level="Basic" phase="during">
+  <step id="v17 zone.js support" phase="during">
     Make sure that you are using a supported version of Zone.js before you upgrade your application. Angular v17 supports Zone.js version 0.14.x or later.
   </step>
-  <step id="v17 ng update" level="Basic" phase="during">
+  <step id="v17 ng update" phase="during">
     In the application's project directory, run `ng update @angular/core@17 @angular/cli@17` to update your application to Angular v17.
   </step>
-  <step id="update @angular/material" level="Basic" phase="during" material="true">
+  <step id="update @angular/material" phase="during" material="true">
     Run `ng update @angular/material@17`.
   </step>
-  <step id="v17 style removal" level="Medium" phase="during">
+  <step id="v17 style removal" phase="during">
     Angular now automatically removes styles of destroyed components, which may impact your existing apps in cases you rely on leaked styles. To change this update the value of the `REMOVE_STYLES_ON_COMPONENT_DESTROY` provider to `false`.
   </step>
-  <step id="v17 router removals" level="Basic" phase="during">
+  <step id="v17 router removals" phase="during">
     Make sure you configure `setupTestingRouter`, `canceledNavigationResolution`, `paramsInheritanceStrategy`, `titleStrategy`, `urlUpdateStrategy`, `urlHandlingStrategy`, and `malformedUriErrorHandler` in `provideRouter` or `RouterModule.forRoot` since these properties are now not part of the `Router`'s public API
   </step>
-  <step id="v17 ngDoCheck dynamic components" level="Advanced" phase="during">
+  <step id="v17 ngDoCheck dynamic components" phase="during">
     For dynamically instantiated components we now execute `ngDoCheck` during change detection if the component is marked as dirty. You may need to update your tests or logic within `ngDoCheck` for dynamically instantiated components.
   </step>
-  <step id="v17 malformedUriErrorHandler" level="Medium" phase="during">
+  <step id="v17 malformedUriErrorHandler" phase="during">
     Handle URL parsing errors in the `UrlSerializer.parse` instead of `malformedUriErrorHandler` because it's now part of the public API surface.
   </step>
-  <step id="v17 zone deep imports" level="Medium" phase="during">
+  <step id="v17 zone deep imports" phase="during">
     Change Zone.js deep imports like `zone.js/bundles/zone-testing.js` and `zone.js/dist/zone` to `zone.js` and `zone.js/testing`.
   </step>
-  <step id="v17 absolute redirects" level="Advanced" phase="during">
+  <step id="v17 absolute redirects" phase="during">
     You may need to adjust your router configuration to prevent infinite redirects after absolute redirects. In v17 we no longer prevent additional redirects after absolute redirects.
   </step>
-  <step id="v17 AnimationDriver" level="Medium" phase="during">
+  <step id="v17 AnimationDriver" phase="during">
     Change references to `AnimationDriver.NOOP` to use `NoopAnimationDriver` because `AnimationDriver.NOOP` is now deprecated.
   </step>
-  <step id="v17 switch strictness" level="Basic" phase="during">
+  <step id="v17 switch strictness" phase="during">
     You may need to adjust the equality check for `NgSwitch` because now it defaults to stricter check with `===` instead of `==`. Angular will log a warning message for the usages where you'd need to provide an adjustment.
   </step>
-  <step id="v17 mutate in signals" level="Advanced" phase="during">
+  <step id="v17 mutate in signals" phase="during">
     Use `update` instead of `mutate` in Angular Signals. For example `items.mutate(itemsArray =&gt; itemsArray.push(newItem));` will now be `items.update(itemsArray =&gt; [itemsArray, …newItem]);`
   </step>
-  <step id="v17 withNoDomReuse" level="Medium" phase="during">
+  <step id="v17 withNoDomReuse" phase="during">
     To disable hydration use `ngSkipHydration` or remove the `provideClientHydration` call from the provider list since `withNoDomReuse` is no longer part of the public API.
   </step>
-  <step id="v17 paramsInheritanceStrategy" level="Basic" phase="during">
+  <step id="v17 paramsInheritanceStrategy" phase="during">
     If you want the child routes of `loadComponent` routes to inherit data from their parent specify the `paramsInheritanceStrategy` to `always`, which in v17 is now set to `emptyOnly`.
   </step>
 </update-guide>
