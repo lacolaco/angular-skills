@@ -1,0 +1,4 @@
+[submodule "upstream/angular"]
+	path = upstream/angular
+	url = https://github.com/angular/angular.git
+	shallow = true

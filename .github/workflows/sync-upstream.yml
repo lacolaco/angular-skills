@@ -33,7 +33,23 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Fetch upstream and regenerate skill data
+      # angular/angular is a large monorepo — the submodule is fetched with
+      # partial clone (--filter=blob:none), depth 1, and sparse-checkout
+      # limited to the one directory main.ts reads. actions/checkout's
+      # built-in submodule support doesn't carry sparse-checkout config
+      # (it isn't tracked in .gitmodules), so the submodule is cloned by
+      # hand here instead, advancing the pointer to the latest upstream
+      # commit each run.
+      - name: Fetch upstream submodule (shallow, partial, sparse)
+        run: |
+          rm -rf upstream/angular
+          url=$(git config -f .gitmodules submodule.upstream/angular.url)
+          git clone --filter=blob:none --depth 1 --no-checkout --sparse "$url" upstream/angular
+          git -C upstream/angular sparse-checkout set adev/src/app/features/update
+          git -C upstream/angular checkout main
+          git submodule absorbgitdirs upstream/angular
+
+      - name: Regenerate skill data
         run: |
           pnpm run extract
           pnpm run render
@@ -55,7 +71,7 @@ jobs:
           commit-message: 'chore: sync angular-update-guide from upstream'
           title: 'chore: sync angular-update-guide from upstream'
           body: |
-            Regenerated `data/recommendations.json` and `skills/angular-update-guide/` from the latest upstream commit touching `adev/src/app/features/update`.
+            Advanced the `upstream/angular` submodule to the latest commit and regenerated `data/recommendations.json` and `skills/angular-update-guide/` from it.
 
             Upstream commit: [`${{ steps.source.outputs.commit_sha }}`](https://github.com/angular/angular/commit/${{ steps.source.outputs.commit_sha }})
           branch: chore/sync-upstream
@@ -63,3 +79,4 @@ jobs:
           add-paths: |
             data/
             skills/
+            upstream/

@@ -40,14 +40,18 @@ Nothing here depends on the installer. Each skill is a directory of Markdown, so
 skills/angular-update-guide/   what `npx skills add` installs — SKILL.md and references/
 tools/                         extraction and rendering
 data/                          intermediate JSON, committed so upstream diffs are readable
+upstream/angular/              git submodule pinned to angular/angular, source of the extraction
 ```
 
-`tools/` reads the Update Guide sources out of angular/angular and writes both `data/recommendations.json` and the reference files. A daily workflow reruns it and opens a pull request when upstream has moved; rendering is deterministic, so a diff means the source changed.
+`upstream/angular` is a git submodule pinned to a specific angular/angular commit — the repository declares exactly which upstream commit it was built from. It's checked out sparse (only `adev/src/app/features/update`) since angular/angular is a large monorepo; see `.gitmodules`.
+
+`tools/` reads the Update Guide sources out of the submodule and writes both `data/recommendations.json` and the reference files. A daily workflow advances the submodule and opens a pull request when upstream has moved; rendering is deterministic, so a diff means the source changed.
 
 ```sh
+git submodule update --init   # first time only, populates upstream/angular
 pnpm install
-pnpm run extract   # read upstream and rebuild the intermediate JSON
-pnpm run render    # rewrite references/ and the generated regions of SKILL.md
+pnpm run extract              # read the submodule and rebuild the intermediate JSON
+pnpm run render               # rewrite references/ and the generated regions of SKILL.md
 pnpm test
 ```
 

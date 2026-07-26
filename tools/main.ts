@@ -1,21 +1,37 @@
-import {writeFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {readFileSync, writeFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 
 import {extractRecommendations, extractVersions} from './extract.js';
-import {fetchUpstream} from './fetch-upstream.js';
+
+const REPO = 'angular/angular';
+const SUBMODULE_RELATIVE_PATH = 'adev/src/app/features/update';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const OUTPUT_PATH = path.join(__dirname, '..', 'data', 'recommendations.json');
+const REPO_ROOT = path.join(__dirname, '..');
+const SUBMODULE_PATH = path.join(REPO_ROOT, 'upstream', 'angular');
+const OUTPUT_PATH = path.join(REPO_ROOT, 'data', 'recommendations.json');
 
 async function main() {
-  const {source, recommendationsText, updateComponentText} = await fetchUpstream();
+  const commitSha = execFileSync('git', ['-C', SUBMODULE_PATH, 'rev-parse', 'HEAD'], {
+    encoding: 'utf-8',
+  }).trim();
+
+  const recommendationsText = readFileSync(
+    path.join(SUBMODULE_PATH, SUBMODULE_RELATIVE_PATH, 'recommendations.ts'),
+    'utf-8',
+  );
+  const updateComponentText = readFileSync(
+    path.join(SUBMODULE_PATH, SUBMODULE_RELATIVE_PATH, 'update.component.ts'),
+    'utf-8',
+  );
 
   const recommendations = extractRecommendations(recommendationsText);
   const versions = extractVersions(updateComponentText);
 
   const output = {
-    source,
+    source: {repo: REPO, path: SUBMODULE_RELATIVE_PATH, commitSha},
     license: 'MIT',
     recommendations,
     versions,
@@ -23,7 +39,7 @@ async function main() {
 
   writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2) + '\n', 'utf-8');
   console.log(`wrote ${recommendations.length} recommendations, ${versions.length} versions`);
-  console.log(`source: ${JSON.stringify(source)}`);
+  console.log(`source: ${JSON.stringify(output.source)}`);
   console.log(`-> ${OUTPUT_PATH}`);
 }
 
