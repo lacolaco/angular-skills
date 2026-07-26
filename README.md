@@ -8,9 +8,7 @@ Agent skills for working with Angular. These do not replace the official [`angul
 
 ## Skills
 
-| Skill | Scope |
-|---|---|
-| `angular-update-guide` | Breaking changes and migration items for every Angular major-to-major step from v6 to v22, generated from the [Angular Update Guide](https://angular.dev/update-guide) data in [angular/angular](https://github.com/angular/angular) so an agent can read it directly instead of browsing the docs site. Reference data only — it does not describe how to run the update. |
+- **`angular-update-guide`** — Breaking changes and migration items for every Angular major-to-major step from v6 to v22, generated from the [Angular Update Guide](https://angular.dev/update-guide) data in [angular/angular](https://github.com/angular/angular) so an agent can read it directly instead of browsing the docs site. Reference data only; it does not describe how to run the update.
 
 ## Install
 

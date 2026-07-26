@@ -9,9 +9,7 @@ Angular を扱うための Agent Skill を集めたリポジトリです。
 
 ## Skills
 
-| Skill | 範囲 |
-|---|---|
-| `angular-update-guide` | Angular の v6 から v22 まで、メジャーからメジャーへの各ステップにおける破壊的変更と移行項目。[angular/angular](https://github.com/angular/angular) にある [Angular Update Guide](https://angular.dev/update-guide) のデータから生成しているので、エージェントはドキュメントサイトを見に行かずに直接読めます。リファレンスデータのみで、更新の実行手順は含みません。 |
+- **`angular-update-guide`**：Angular の v6 から v22 まで、メジャーからメジャーへの各ステップにおける破壊的変更と移行項目。[angular/angular](https://github.com/angular/angular) にある [Angular Update Guide](https://angular.dev/update-guide) のデータから生成しているので、エージェントはドキュメントサイトを見に行かずに直接読めます。リファレンスデータのみで、更新の実行手順は含みません。
 
 ## インストール
 
