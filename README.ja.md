@@ -17,8 +17,6 @@ Angular を扱うための Agent Skill を集めたリポジトリです。
 
 ## インストール
 
-[`skills`](https://www.npmjs.com/package/skills)（Vercel Labs によるオープンな Agent Skill インストーラ）で導入します。
-
 ```sh
 # プロジェクトに入れる
 npx skills add lacolaco/angular-skills

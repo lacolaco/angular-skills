@@ -16,8 +16,6 @@ These do not replace the official [`angular/skills`](https://github.com/angular/
 
 ## Install
 
-This repository is consumed via [`skills`](https://www.npmjs.com/package/skills) (the open agent-skill installer by Vercel Labs):
-
 ```sh
 # In your project
 npx skills add lacolaco/angular-skills
