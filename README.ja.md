@@ -2,8 +2,10 @@
 
 [English](./README.md)
 
-Angular のリファレンスデータを収めた Agent Skill です。
-素材は [angular/angular](https://github.com/angular/angular) のソースから生成しているため、エージェントはドキュメントサイトを見に行かずに直接読めます。
+Angular を扱うための Agent Skill を集めたリポジトリです。
+
+ここにあるスキルは、公式の [`angular/skills`](https://github.com/angular/skills) を代替するものではありません。
+公式スキルがカバーしていない範囲を補うためのものです。
 
 **非公式です。** このリポジトリは Google および Angular チームとの提携も、承認も、サポートも受けていません。
 
@@ -11,7 +13,7 @@ Angular のリファレンスデータを収めた Agent Skill です。
 
 | Skill | 範囲 |
 |---|---|
-| `angular-update-guide` | Angular の v6 から v22 まで、メジャーからメジャーへの各ステップにおける破壊的変更と移行項目。[Angular Update Guide](https://angular.dev/update-guide) のデータから生成しています。リファレンスデータのみで、更新の実行手順は含みません。 |
+| `angular-update-guide` | Angular の v6 から v22 まで、メジャーからメジャーへの各ステップにおける破壊的変更と移行項目。[angular/angular](https://github.com/angular/angular) にある [Angular Update Guide](https://angular.dev/update-guide) のデータから生成しているので、エージェントはドキュメントサイトを見に行かずに直接読めます。リファレンスデータのみで、更新の実行手順は含みません。 |
 
 ## インストール
 
@@ -32,7 +34,7 @@ npx skills add lacolaco/angular-skills -s angular-update-guide
 インストール内容は `skills-lock.json` に記録されるので、これをコミットすれば共同作業者も同じ内容を解決できます。
 
 インストーラに依存する部分はありません。
-各スキルは `SKILL.md` と `references/` からなる素のディレクトリなので、手で配置しても同じように動きます。
+各スキルは `SKILL.md` を起点とする素のディレクトリなので、手で配置しても同じように動きます。
 
 ## 更新を依頼する
 
@@ -64,18 +66,18 @@ npx skills add lacolaco/angular-skills -s angular-update-guide
 ## リポジトリの構成
 
 ```
-skills/<name>/         npx skills add がインストールする対象。SKILL.md と references/
-tools/<name>/          そのスキルのビルド
-upstream/angular/      angular/angular にピンした git submodule。Angular 系スキルで共有する
+skills/<name>/         npx skills add がインストールする対象。SKILL.md とその隣のファイル
+tools/<name>/          そのスキルのビルド（持つ場合）
+upstream/angular/      angular/angular にピンした git submodule。上流のソースを要するビルドが読む
 ```
 
 1 つのスキルに属するものはすべてその名前の下にまとめてあるので、2 つ目のスキルを追加しても既存のものに触れずに済みます。
 
 `upstream/angular` は angular/angular の特定コミットにピンした git submodule です。
-どの上流コミットからビルドされたかを、リポジトリ自身が宣言していることになります。
+生成物がどの上流コミットからビルドされたかを、リポジトリ自身が宣言していることになります。
 angular/angular は巨大なモノレポなので、`adev/src/app/features/update` だけを sparse checkout しています（`.gitmodules` を参照）。
 
-スキルのビルドは、submodule から Update Guide のソースを読んでリファレンスファイルを一度に書き出します。
+`angular-update-guide` のビルドは、submodule から Update Guide のソースを読んでリファレンスファイルを一度に書き出します。
 日次のワークフローが submodule を進めて再ビルドし、リファレンスに実際の変化があったときだけプルリクエストを開きます。
 ビルドは決定論的なので、差分が出たということは上流が動いたということです。
 
@@ -88,8 +90,8 @@ pnpm test
 
 ## 設計上の選択
 
-- **v6 より前からの更新は対象外です。** 上流も同じ境界を引いています。Update Guide は v6 未満を推奨項目の一覧ではなく `renderPreV6Instructions()` に渡しています。
-- **レベルやオプションによる事前の絞り込みをしません。** 上流の UI は、人間が複雑度レベルを選び、Angular Material、ngUpgrade、Windows を切り替える形です。生成ファイルは全項目を保持します。対象プロジェクトの `package.json`、ソース、実行環境を読めるエージェントのほうが、あらかじめ設定したフィルタより正確に判断できるからです。
+- **`angular-update-guide` は v6 より前からの更新を対象にしていません。** 上流も同じ境界を引いています。Update Guide は v6 未満を推奨項目の一覧ではなく `renderPreV6Instructions()` に渡しています。
+- **`angular-update-guide` はレベルやオプションによる事前の絞り込みをしません。** 上流の UI は、人間が複雑度レベルを選び、Angular Material、ngUpgrade、Windows を切り替える形です。生成ファイルは全項目を保持します。対象プロジェクトの `package.json`、ソース、実行環境を読めるエージェントのほうが、あらかじめ設定したフィルタより正確に判断できるからです。
 - **npm に公開せず、タグも CHANGELOG も持ちません。** `npx skills add` はデフォルトブランチの HEAD を解決するので、ブランチ自体がリリースチャネルです。パッケージにバージョンを付けても、誰も読まない 2 つ目の真実の所在が増えるだけです。
 
 ## ライセンス
