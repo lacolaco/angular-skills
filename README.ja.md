@@ -26,16 +26,11 @@ npx skills add lacolaco/angular-skills -g
 npx skills add lacolaco/angular-skills -s angular-update-guide
 ```
 
-スキルは `.agents/skills/` に配置され、インストーラが利用環境に応じたディレクトリへリンクを張ります。
-インストール内容は `skills-lock.json` に記録されるので、これをコミットすれば共同作業者も同じ内容を解決できます。
+## Usage
 
-インストーラに依存する部分はありません。
-各スキルは `SKILL.md` を起点とする素のディレクトリなので、手で配置しても同じように動きます。
+### `angular-update-guide` : メジャー間で何が壊れるか
 
-## `angular-update-guide`
-
-このスキルが持つのは「何が変わるか」であって「どう変えるか」ではありません。
-そのため、もともと投げるつもりだった依頼の中で働きます。
+もともと投げるつもりだった依頼の中で働きます。
 スキルの名前を出す必要はありません。
 
 > このプロジェクトを Angular 21 に上げて。
@@ -45,6 +40,12 @@ npx skills add lacolaco/angular-skills -s angular-update-guide
 着手を決める前の調査にも使えます。
 
 > このコードベースで Angular 20 から 21 の間に何が壊れる？まだ何も変更しないで、まずリストを見せて。
+
+**設計上の選択**
+
+- **v6 より前からの更新は対象外です。** 上流も同じ境界を引いています。Update Guide は v6 未満を推奨項目の一覧ではなく `renderPreV6Instructions()` に渡しています。
+- **複雑度レベルを持ちません。** 上流の `Basic` / `Medium` / `Advanced` は、一度に人間の前へ出す項目数を抑えるための目盛りです。ファイル全体を読むエージェントにその制約はありません。属性として残しても、上流が更新の一部と見なしている項目を落とす根拠に使われるだけなので、生成時に捨てています。
+- **オプション条件で事前に絞り込みません。** Angular Material、ngUpgrade、Windows の条件は属性として項目に残します。どれが該当するかは、対象プロジェクトの `package.json`、ソース、実行環境を読んで判断します。あらかじめ設定したフィルタより正確だからです。
 
 ## 必要なもの
 
@@ -75,12 +76,6 @@ pnpm install
 pnpm run build:angular-update-guide      # references/ と SKILL.md の生成領域を書き換える
 pnpm test
 ```
-
-## 設計上の選択
-
-- **`angular-update-guide` は v6 より前からの更新を対象にしていません。** 上流も同じ境界を引いています。Update Guide は v6 未満を推奨項目の一覧ではなく `renderPreV6Instructions()` に渡しています。
-- **`angular-update-guide` は複雑度レベルを持ちません。** 上流の `Basic` / `Medium` / `Advanced` は、一度に人間の前へ出す項目数を抑えるための目盛りです。ファイル全体を読むエージェントにその制約はありません。属性として残しても、上流が更新の一部と見なしている項目を落とす根拠に使われるだけなので、生成時に捨てています。
-- **`angular-update-guide` はオプション条件で事前に絞り込みません。** Angular Material、ngUpgrade、Windows の条件は属性として項目に残します。どれが該当するかは、対象プロジェクトの `package.json`、ソース、実行環境を読んで判断します。あらかじめ設定したフィルタより正確だからです。
 
 ## ライセンス
 

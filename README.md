@@ -25,13 +25,11 @@ npx skills add lacolaco/angular-skills -g
 npx skills add lacolaco/angular-skills -s angular-update-guide
 ```
 
-Skills land in `.agents/skills/`, and the installer links them into whichever agent-specific directories your setup uses. The install is recorded in `skills-lock.json`; commit that lockfile so collaborators resolve the same content.
+## Usage
 
-Nothing here depends on the installer. Each skill is a plain directory rooted at `SKILL.md`, so vendoring it by hand works just as well.
+### `angular-update-guide` : what breaks between two Angular majors
 
-## `angular-update-guide`
-
-The skill carries what changes, not how to change it, so it does its work inside whatever you were already going to ask. Nothing needs to name it:
+It does its work inside whatever you were already going to ask. Nothing needs to name it:
 
 > Upgrade this project to Angular 21.
 
@@ -40,6 +38,12 @@ The skill carries what changes, not how to change it, so it does its work inside
 Reference data is also useful before committing to anything:
 
 > What breaks between Angular 20 and 21 for this codebase? Don't change anything yet, just show me the list.
+
+**Opinionated choices**
+
+- **Versions older than v6 are out of scope.** Upstream draws the same boundary — the Update Guide hands anything below v6 to `renderPreV6Instructions()` instead of the recommendation list.
+- **No complexity level.** `Basic` / `Medium` / `Advanced` is a dial for how many items to put in front of a human at once, and an agent reading the whole file has no such limit. Kept as an attribute, it would serve only as grounds for dropping items upstream still counts as part of the update.
+- **No pre-filtering by option.** The Angular Material, ngUpgrade, and Windows conditions stay on the items. Which ones apply is decided by reading the target project's `package.json`, source, and platform, which is more accurate than a filter set in advance.
 
 ## Requirements
 
@@ -66,12 +70,6 @@ pnpm install
 pnpm run build:angular-update-guide      # rewrite references/ and the generated regions of SKILL.md
 pnpm test
 ```
-
-## Opinionated choices
-
-- **`angular-update-guide` leaves out versions older than v6.** Upstream draws the same boundary — the Update Guide hands anything below v6 to `renderPreV6Instructions()` instead of the recommendation list.
-- **`angular-update-guide` drops upstream's complexity level.** `Basic` / `Medium` / `Advanced` is a dial for how many items to put in front of a human at once, and an agent reading the whole file has no such limit. Kept as an attribute, it would serve only as grounds for dropping items upstream still counts as part of the update.
-- **`angular-update-guide` does not pre-filter by option.** The Angular Material, ngUpgrade, and Windows conditions stay on the items. Which ones apply is decided by reading the target project's `package.json`, source, and platform, which is more accurate than a filter set in advance.
 
 ## License
 
