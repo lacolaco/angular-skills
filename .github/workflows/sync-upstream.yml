@@ -56,9 +56,13 @@ jobs:
           # The submodule points at upstream HEAD, which moves whenever
           # angular/angular does — far more often than the Update Guide data
           # changes. Only the reference files are compared: SKILL.md carries
-          # the upstream SHA and so differs on every run, which would make
-          # this gate fire every day with nothing to review.
-          if git diff --quiet -- skills/angular-update-guide/references; then
+          # the upstream SHA and so differs whenever upstream has moved at
+          # all, which would make this gate fire with nothing to review.
+          #
+          # status, not diff: a new major produces a brand-new reference file
+          # and touches no existing one, and git diff cannot see an untracked
+          # path — the one moment the guide most needs publishing.
+          if [ -z "$(git status --porcelain -- skills/angular-update-guide/references)" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"

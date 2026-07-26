@@ -187,7 +187,11 @@ export function updateSkillMd(skillMdContent: string, versions: Version[], commi
 
 export function render(data: RecommendationsData): void {
   const pairs = computeMajorPairs(data.versions);
-  const maxVersionNumber = Math.max(...data.versions.map((v) => v.number));
+
+  // The last pair, not the highest entry in the versions table: upstream also
+  // lists minors, so a released 22.1 would outrank 22.0 and leave no pair to
+  // mark — dropping the unreleased warning from every file at once.
+  const latestPair = pairs[pairs.length - 1];
 
   mkdirSync(OUTPUT_DIR, {recursive: true});
 
@@ -195,7 +199,7 @@ export function render(data: RecommendationsData): void {
     const fromMajor = Math.floor(from.number / 100);
     const toMajor = Math.floor(to.number / 100);
     const outputPath = path.join(OUTPUT_DIR, `v${fromMajor}-to-v${toMajor}.xml`);
-    writeFileSync(outputPath, renderStep(data, from, to, to.number === maxVersionNumber), 'utf-8');
+    writeFileSync(outputPath, renderStep(data, from, to, to === latestPair.to), 'utf-8');
   }
 
   const skillMdContent = readFileSync(SKILL_MD_PATH, 'utf-8');

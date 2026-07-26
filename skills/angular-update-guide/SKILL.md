@@ -25,7 +25,7 @@ The files under `references/` are generated from `adev/src/app/features/update/r
 Each file is an `<update-guide>` document; each item is a `<step>` element. Its `phase` attribute (`before` / `during` / `after`) says when it applies, in that document order. Its `id` attribute is upstream's identifier for it — use it when referring to a specific item.
 
 ```xml
-<update-guide from="21.0" to="22.0" source="angular/angular@5ad8231">
+<update-guide from="21.0" to="22.0">
   <unreleased-warning>
     Plans for releases after the current major release are not finalized and may change. ...
   </unreleased-warning>
