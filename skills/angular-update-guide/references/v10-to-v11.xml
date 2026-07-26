@@ -1,0 +1,89 @@
+<update-guide from="10.0" to="11.0" source="angular/angular@5ad823139758b4d3a8a021d378b008c3457f8689">
+  <step id="universal-baseurl" level="Medium" phase="during">
+    For Angular Universal users, if you use `useAbsoluteUrl` to setup `platform-server`, you now need to also specify `baseUrl`.
+  </step>
+  <step id="v11 ng update" level="Basic" phase="during">
+    Run `ng update @angular/core@11 @angular/cli@11` which should bring you to version 11 of Angular.
+  </step>
+  <step id="update @angular/material" level="Basic" phase="during" material="true">
+    Run `ng update @angular/material@11`.
+  </step>
+  <step id="v11 versions" level="Basic" phase="during">
+    Angular now requires [TypeScript 4.0](https://devblogs.microsoft.com/typescript/announcing-typescript-4-0/). `ng update` will migrate you automatically.
+  </step>
+  <step id="v11 browser support" level="Basic" phase="during">
+    Support for IE9, IE10, and IE mobile has been removed. This was announced in the [v10 update](https://blog.angular.dev/version-10-of-angular-now-available-78960babd41#c357). 
+  </step>
+  <step id="webpack5 optin" level="Medium" phase="during">
+    You can now opt-in to use webpack 5 by using Yarn and adding `"resolutions": {"webpack": "^5.0.0"}` to your `package.json`.
+  </step>
+  <step id="ng new strict prompt" level="Medium" phase="during">
+    When generating new projects, you will be asked if you want to enable strict mode. This will configure TypeScript and the Angular compiler for stricter type checking, and apply smaller bundle budgets by default. You can use the `--strict=true` or `--strict=false` to skip the prompt.
+  </step>
+  <step id="v11 router relativeLinkResolution" level="Advanced" phase="during">
+    If you use the router, the default value of `relativeLinkResolution` has changed from `legacy` to `corrected`. If your application previously used the default by not specifying a value in the `ExtraOptions` and uses relative links when navigating from children of empty path routes, you will need to update your `RouterModule`'s configuration to specifically specify `legacy` for `relativeLinkResolution`. See [the documentation](https://v11.angular.io/api/router/ExtraOptions#relativeLinkResolution) for more details.
+  </step>
+  <step id="router initialNavigation" level="Advanced" phase="during">
+    In the Angular Router, the options deprecated in v4 for `initialNavigation` have been removed. If you previously used `enabled` or `true`, now choose `enabledNonBlocking` or `enabledBlocking`. If you previously used `false` or `legacy_disabled`, now use `disabled`.
+  </step>
+  <step id="routerlink preserveQueryParams" level="Medium" phase="during">
+    In the Angular Router's `routerLink`, `preserveQueryParams` has been removed, use `queryParamsHandling="preserve"` instead.
+  </step>
+  <step id="routerlink queryParams typing" level="Advanced" phase="during">
+    If you were accessing the `routerLink` values of `queryParams`, `fragment` or `queryParamsHandling` you might need to relax the typing to also accept `undefined` and `null`.
+  </step>
+  <step id="viewencapsulation native removed" level="Advanced" phase="during">
+    The component view encapsulation option `ViewEncapsulation.Native` has been removed. Use `ViewEncapsulation.ShadowDom` instead. `ng update` will migrate you automatically.
+  </step>
+  <step id="ICU expressions typechecked" level="Advanced" phase="during">
+    If you use i18n, expressions within International Components for Unicode (ICUs) expressions are now type-checked again. This may cause compilation failures if errors are found in expressions that appear within an ICU. 
+  </step>
+  <step id="forms validators asyncValidators typing" level="Advanced" phase="during">
+    Directives in the `@angular/forms` package used to have `any[]` as the type of the expected `validators` and `asyncValidators` arguments in constructors. Now these arguments are properly typed, so if your code relies on form's directive constructor types it may require some updates to improve type safety.
+  </step>
+  <step id="forms AbstractFormControl" level="Advanced" phase="during">
+    If you use Angular Forms, the type of `AbstractFormControl.parent` now includes null.  `ng update` will migrate you automatically, but in an unlikely case your code was testing the parent against undefined with strict equality, you'll need to change this to `=== null` instead, since the parent is now explicitly initialized with `null` instead of being left undefined.
+  </step>
+  <step id="platform-webworker" level="Advanced" phase="during">
+    The rarely used `@angular/platform-webworker` and `@angular/platform-webworker-dynamic` were deprecated in v8 and have been removed. Running parts of Angular in a web worker was an experiment that never worked well for common use cases. Angular still has great support for [Web Workers](https://angular.io/guide/web-worker). 
+  </step>
+  <step id="v11 slice pipe typing" level="Advanced" phase="during">
+    The `slice` pipe now returns null for the undefined input value, which is consistent with the behavior of most pipes.
+  </step>
+  <step id="v11 keyvalue typing" level="Advanced" phase="during">
+    The `keyvalue` pipe has been fixed to report that for input objects that have number keys, the result type will contain the string representation of the keys. This was already the case and the code has simply been updated to reflect this. Please update the consumers of the pipe output if they were relying on the incorrect types. Note that this does not affect use cases where the input values are `Map`s, so if you need to preserve `number`s, this is an effective way.
+  </step>
+  <step id="v11 number pipe typing" level="Advanced" phase="during">
+    The number pipes (`decimal`, `percent`, `currency`, etc) now explicitly state which types are accepted.
+  </step>
+  <step id="v11 date pipe typing" level="Advanced" phase="during">
+    The `date` pipe now explicitly states which types are accepted.
+  </step>
+  <step id="v11 datetime rounding" level="Advanced" phase="during">
+    When passing a date-time formatted string to the `DatePipe` in a format that contains fractions of a millisecond, the milliseconds will now always be rounded down rather than to the nearest millisecond. Most applications will not be affected by this change. If this is not the desired behaviour then consider pre-processing the string to round the millisecond part before passing it to the `DatePipe`.
+  </step>
+  <step id="v11 async pipe typing" level="Advanced" phase="during">
+    The `async` pipe no longer claims to return undefined for an input that was typed as undefined. Note that the code actually returned null on undefined inputs.
+  </step>
+  <step id="v11 case pipe update" level="Medium" phase="during">
+    The `uppercase` and `lowercase` pipes no longer let falsy values through. They now map both `null` and `undefined` to `null` and raise an exception on invalid input (`0`, `false`, `NaN`). This matches other Angular pipes.
+  </step>
+  <step id="v11 router NavigationExtras typing" level="Advanced" phase="during">
+    If you use the router with `NavigationExtras`, new typings allow a variable of type `NavigationExtras` to be passed in, but they will not allow object literals, as they may only specify known properties. They will also not accept types that do not have properties in common with the ones in the `Pick`. If you are affected by this change, only specify properties from the NavigationExtras which are actually used in the respective function calls or use a type assertion on the object or variable: `as NavigationExtras`.
+  </step>
+  <step id="v11 TestBed.overrideProvider" level="Medium" phase="during">
+    In your tests if you call `TestBed.overrideProvider` after TestBed initialization, provider overrides are no longer applied. This behavior is consistent with other override methods (such as `TestBed.overrideDirective`, etc) but they throw an error to indicate that. The check was previously missing in the TestBed.overrideProvider function. If you see this error, you should move `TestBed.overrideProvider` calls before TestBed initialization is completed.
+  </step>
+  <step id="v11 router RouteReuseStrategy" level="Medium" phase="during">
+    If you use the Router's RouteReuseStrategy, the argument order has changed. When calling `RouteReuseStrategy#shouldReuseRoute` previously when evaluating child routes, they would be called with the `future` and `current` arguments swapped. If your `RouteReuseStrategy` relies specifically on only the future or current snapshot state, you may need to update the `shouldReuseRoute` implementation's use of `future` and `current` `ActivateRouteSnapshots`.
+  </step>
+  <step id="v11 locale data readonly" level="Advanced" phase="during">
+    If you use locale data arrays, this API will now return readonly arrays. If you were mutating them (e.g. calling `sort()`, `push()`, `splice()`, etc) then your code will not longer compile. If you need to mutate the array, you should now take a copy (e.g. by calling `slice()`) and mutate the copy.
+  </step>
+  <step id="v11 CollectionChangeRecord" level="Advanced" phase="during">
+    In change detection, `CollectionChangeRecord` has been removed, use `IterableChangeRecord` instead.
+  </step>
+  <step id="v11 forms async validators" level="Medium" phase="during">
+    If you use Angular Forms with async validators defined at initialization time on class instances of `FormControl`, `FormGroup` or `FormArray` , the status change event was not previously emitted once async validator completed. This has been changed so that the status event is emitted into the `statusChanges` observable. If your code relies on the old behavior, you can filter/ignore this additional status change event.
+  </step>
+</update-guide>

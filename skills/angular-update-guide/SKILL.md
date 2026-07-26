@@ -20,50 +20,43 @@ The files under `references/` are generated from `adev/src/app/features/update/r
 
 1. Read `@angular/core` in the project's `package.json` to determine the current major version.
 2. Plan **one major at a time**. Upstream: "You can't run `ng update` to update Angular applications more than one major version at a time." Going from v16 to v19 is three separate steps, each with its own reference file.
-3. For each step, read `references/v{N}-to-v{N+1}.md`.
+3. For each step, read `references/v{N}-to-v{N+1}.xml`.
 
-Each file groups its items into **Before the update** / **During the update** / **After the update**, in that order. The backticked string under each item is upstream's identifier for it — use it when referring to a specific item.
+Each file is an `<update-guide>` document; each item is a `<step>` element. Its `phase` attribute (`before` / `during` / `after`) says when it applies, in that document order. Its `id` attribute is upstream's identifier for it — use it when referring to a specific item.
 
-## Tags
+## Attributes
 
-Every item begins with a level tag, optionally followed by option tags.
+`level` is upstream's vocabulary. It is **a dial for how much detail to show, not a measure of how hard the work is**:
 
-`[Basic]` / `[Medium]` / `[Advanced]` are upstream's vocabulary. They are **a dial for how much detail to show, not a measure of how hard the work is**:
+- `Basic` — "Shows information for all Angular developers."
+- `Medium` — "Shows information that's of interest to more advanced Angular developers."
+- `Advanced` — "Shows all the information we have about this update."
 
-- `[Basic]` — "Shows information for all Angular developers."
-- `[Medium]` — "Shows information that's of interest to more advanced Angular developers."
-- `[Advanced]` — "Shows all the information we have about this update."
+So `level="Basic"` means *everyone needs to see this*, not *this is easy*. A `Basic` item can be a large migration, and an `Advanced` item can be a one-line change that happens to affect few projects.
 
-So `[Basic]` means *everyone needs to see this*, not *this is easy*. A `[Basic]` item can be a large migration, and an `[Advanced]` item can be a one-line change that happens to affect few projects.
-
-Option tags mark items that apply only under a condition:
-
-- `[Angular Material only]` — only if the project uses Angular Material.
-- `[ngUpgrade only]` — only if the project uses ngUpgrade.
-- `[Windows only]` — only on Windows.
-- `[non-Windows only]` — only on platforms other than Windows. Mutually exclusive with `[Windows only]`; the same instruction often appears twice with different shell syntax.
+`ngUpgrade`, `material`, and `windows` mark items that apply only under a condition; they're absent otherwise. `windows` is the exception where the negative case is also written out: `windows="true"` applies only on Windows, `windows="false"` applies only on platforms other than Windows (the same instruction often appears twice, once per value, with different shell syntax).
 
 **These files are not pre-filtered.** Every item is present at every level and for every option. Decide what applies by inspecting the actual project — its `package.json`, its source, the host platform — rather than by trusting an assumption about which items matter.
 
 ## Available references
 
 <!-- REFERENCES:START -->
-- `references/v6-to-v7.md`
-- `references/v7-to-v8.md`
-- `references/v8-to-v9.md`
-- `references/v9-to-v10.md`
-- `references/v10-to-v11.md`
-- `references/v11-to-v12.md`
-- `references/v12-to-v13.md`
-- `references/v13-to-v14.md`
-- `references/v14-to-v15.md`
-- `references/v15-to-v16.md`
-- `references/v16-to-v17.md`
-- `references/v17-to-v18.md`
-- `references/v18-to-v19.md`
-- `references/v19-to-v20.md`
-- `references/v20-to-v21.md`
-- `references/v21-to-v22.md`
+- `references/v6-to-v7.xml`
+- `references/v7-to-v8.xml`
+- `references/v8-to-v9.xml`
+- `references/v9-to-v10.xml`
+- `references/v10-to-v11.xml`
+- `references/v11-to-v12.xml`
+- `references/v12-to-v13.xml`
+- `references/v13-to-v14.xml`
+- `references/v14-to-v15.xml`
+- `references/v15-to-v16.xml`
+- `references/v16-to-v17.xml`
+- `references/v17-to-v18.xml`
+- `references/v18-to-v19.xml`
+- `references/v19-to-v20.xml`
+- `references/v20-to-v21.xml`
+- `references/v21-to-v22.xml`
 <!-- REFERENCES:END -->
 
 Updates from versions older than v6 are out of scope.

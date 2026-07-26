@@ -27,11 +27,11 @@ npx skills add lacolaco/angular-skills -s angular-update-guide
 
 Skills land in `.agents/skills/`, and the installer links them into whichever agent-specific directories your setup uses. The install is recorded in `skills-lock.json`; commit that lockfile so collaborators resolve the same content.
 
-Nothing here depends on the installer. Each skill is a directory of Markdown, so vendoring it by hand works just as well.
+Nothing here depends on the installer. Each skill is a plain directory (`SKILL.md` plus `references/`), so vendoring it by hand works just as well.
 
 ## Requirements
 
-- Nothing at the install site. The skills are plain Markdown with no runtime dependency.
+- Nothing at the install site. The skills are plain text files with no runtime dependency.
 - To work on this repository: Node.js v22 or newer and `pnpm`.
 
 ## Repository layout

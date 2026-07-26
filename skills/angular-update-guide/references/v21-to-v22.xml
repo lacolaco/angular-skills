@@ -1,0 +1,116 @@
+<update-guide from="21.0" to="22.0" source="angular/angular@5ad823139758b4d3a8a021d378b008c3457f8689">
+  <unreleased-warning>
+    Plans for releases after the current major release are not finalized and may change. These recommendations are based on scheduled deprecations.
+  </unreleased-warning>
+  <step id="22.0.0_ng_update" level="Basic" phase="during">
+    In the application's project directory, run `ng update @angular/core@22 @angular/cli@22` to update your application to Angular v22.
+  </step>
+  <step id="update @angular/material" level="Basic" phase="during" material="true">
+    Run `ng update @angular/material@22`.
+  </step>
+  <step id="22.0.0-update-nodejs-version" level="Basic" phase="during">
+    Angular v22 requires Node.js v22.22.3 or v24.15.0 and later. Update your Node.js version to meet this minimum requirement. You can check your current version with `node --version`.
+  </step>
+  <step id="22.0.0-update-typescript-version" level="Basic" phase="during">
+    Update your project to use TypeScript 6.0 or later. Versions older than 6.0 are no longer supported. Use `ng update` which will handle this automatically.
+  </step>
+  <step id="22.0.0-data-attributes-input-output-binding" level="Medium" phase="during">
+    Data-prefixed attributes (e.g., `data-*`) no longer bind to inputs or outputs. If you were relying on this behavior, use explicit property bindings instead (e.g., `[attr.data-value]="value"` or `[dataValue]="value"` for a component input).
+  </step>
+  <step id="22.0.0-duplicate-input-output-bindings" level="Medium" phase="during">
+    The compiler now throws an error when inputs, outputs, or model are binding to the same property/output. Review your component decorators and ensure no duplicate bindings exist.
+  </step>
+  <step id="22.0.0-safe-navigation-nullability-narrowing" level="Medium" phase="during">
+    Safe navigation (`?.`) and nullish coalescing (`??`) now correctly narrow down nullable types in templates. This may trigger `nullishCoalescingNotNullable` and `optionalChainNotNullable` diagnostics on existing projects. Either fix the diagnostics by updating your templates, or temporarily disable them in your `tsconfig.json` under `angularCompilerOptions`.
+  </step>
+  <step id="22.0.0-safe-navigation-returns-undefined" level="Medium" phase="during">
+    Angular expressions with optional chaining (`?.`) now return `undefined` instead of `null`. You can use the `$safeNavigationMigration()` magic function to revert to the previous behavior.
+  </step>
+  <step id="22.0.0-resource-stream-synchronous-resolution" level="Medium" phase="during">
+    The `stream` property on `Resource`, including `rxResource`, now resolves synchronously when the stream or observable emits synchronously. Tests that assumed asynchronous resolution may need to wait for the value immediately instead.
+  </step>
+  <step id="22.0.0-remove-in-expressions" level="Advanced" phase="during">
+    `in` variables in template expressions now throw an error as it does in native JavaScript. If you have variables named `in` in your component or template, update your template expressions to use `this.in` or rename your variable.
+  </step>
+  <step id="22.0.0-animation-callback-event-signature-change" level="Advanced" phase="during">
+    The `AnimationCallbackEvent.animationComplete` signature has changed. Update any code that depends on the old signature of this event. Review your animation event handlers and tests.
+  </step>
+  <step id="22.0.0-http-xhr-backend-explicit-opt-in" level="Medium" phase="during">
+    If your application uses upload progress reporting through `HttpXhrBackend`, explicitly opt-in by using `provideHttpClient(withXhr())`. The default HTTP client no longer includes XHR support by default.
+  </step>
+  <step id="22.0.0-deprecate-report-progress-option" level="Medium" phase="during">
+    The `reportProgress` option in HTTP requests is deprecated. Use `reportUploadProgress` or `reportDownloadProgress` instead for more explicit control over progress reporting.
+  </step>
+  <step id="22.0.0-deprecate-server-xhr" level="Medium" phase="during">
+    XHR support in `@angular/platform-server` is deprecated and is intended to be removed in Angular 23. The underlying `xhr2` library does not safely handle redirects (e.g. it can forward `Authorization` headers on cross-origin redirects and is susceptible to DoS via redirect loops). For server-side rendering, use the default `fetch` backend instead of `withXhr()`.
+  </step>
+  <step id="22.0.0-provide-routes-removed" level="Medium" phase="during">
+    `provideRoutes()` has been removed. Use `provideRouter()` instead, or configure routes as a multi token using `ROUTES` if necessary. Update your application bootstrap configuration.
+  </step>
+  <step id="22.0.0-upgrade-angular-js-global-migration" level="Advanced" phase="during">
+    If using AngularJS interoperability, replace deprecated `getAngularLib()` and `setAngularLib()` with `getAngularJSGlobal()` and `setAngularJSGlobal()` respectively.
+  </step>
+  <step id="22.0.0-remove-component-factory-resolver" level="Advanced" phase="during">
+    `ComponentFactoryResolver` and `ComponentFactory` are no longer available. Pass the component class directly to APIs like `ViewContainerRef.createComponent()` or use the standalone `createComponent()` function instead.
+  </step>
+  <step id="22.0.0-remove-create-ng-module-ref" level="Advanced" phase="during">
+    `createNgModuleRef` has been removed. Use `createNgModule()` instead for dynamic module creation scenarios.
+  </step>
+  <step id="22.0.0-compile-time-duplicate-selectors" level="Medium" phase="during">
+    Elements with multiple matching selectors now throw a compile-time error. Ensure your components use unique selectors and review any directives that might have conflicting selectors.
+  </step>
+  <step id="22.0.0-component-onpush-default" level="Medium" phase="during">
+    Components with no `changeDetection` property defined are now `OnPush` by default. To maintain `Eager` (the previous default) change detection, explicitly set `changeDetection: ChangeDetectionStrategy.Eager` in your component decorator.
+  </step>
+  <step id="22.0.0-remove-check-no-changes" level="Advanced" phase="during">
+    `ChangeDetectorRef.checkNoChanges()` has been removed. In tests, use `fixture.detectChanges()` instead or verify your component state through other means.
+  </step>
+  <step id="22.0.0-leave-animations-scope-change" level="Medium" phase="during">
+    Leave animations are no longer limited to the element being removed. They now support nested animations scoped to component boundaries. Review your animation configurations if you relied on the previous scoping behavior.
+  </step>
+  <step id="22.0.0-params-inheritance-strategy-default" level="Medium" phase="during">
+    `paramsInheritanceStrategy` now defaults to `"always"` instead of `"emptyOnly"`. This means route parameters are inherited from all parent routes. To restore the previous behavior, explicitly set `paramsInheritanceStrategy: "emptyOnly"` in your router configuration.
+  </step>
+  <step id="22.0.0-can-match-current-snapshot-required" level="Advanced" phase="during">
+    The `currentSnapshot` parameter in `CanMatchFn` and the `canMatch` method of the `CanMatch` interface is now required. Update any class implementations of `CanMatch` to include this required third argument.
+  </step>
+  <step id="22.0.0-hammer-js-removed" level="Medium" phase="during">
+    Hammer.js integration has been removed from Angular platform-browser. If you need touch gesture support, implement your own gesture detection or use an alternative library.
+  </step>
+  <step id="22.0.0-app-ref-bootstrap-typing" level="Advanced" phase="during">
+    The second argument of `appRef.bootstrap()` no longer accepts `any` type. Ensure the element you pass is not nullable and matches the expected type.
+  </step>
+  <step id="22.0.0-platform-browser-styles-removal" level="Medium" phase="during">
+    Unused styles are now automatically removed when their associated `host` is dropped. Be aware that other DOM on the page may be affected if those styles are used by elements outside of Angular or if not using `ViewEncapsulation.Emulated`.
+  </step>
+  <step id="22.0.0-title-strategy-return-type" level="Advanced" phase="during">
+    The return type for `TitleStrategy.getResolvedTitleForRoute` has changed from `any` to a stricter type (e.g., `string | undefined`). Update your custom `TitleStrategy` implementations to match the new signature.
+  </step>
+  <step id="22.0.0-incremental-hydration-default" level="Basic" phase="during">
+    Incremental hydration is now the default behavior for applications using Server-Side Rendering (SSR). Review your application if you relied on the previous non-incremental hydration behavior. You can use `withNoIncrementalHydration()` to restore the previous behavior if needed.
+  </step>
+  <step id="22.0.0-full-template-type-check-removed" level="Medium" phase="during">
+    The `fullTemplateTypeCheck` compiler option has been removed. Use `strictTemplates` instead to enable strict template type checking in your `tsconfig.json`.
+  </step>
+  <step id="22.0.0-strict-templates-default" level="Basic" phase="during">
+    The `strictTemplates` compiler option now defaults to `true`. If your project was not using strict template type checking, you may see new compilation errors. Resolve these errors or explicitly set `strictTemplates: false` in your `tsconfig.json` to opt out.
+  </step>
+  <step id="22.0.0-webpack-builders-deprecated" level="Advanced" phase="during">
+    Webpack builders (`@angular-devkit/build-angular` and `@angular-devkit/build-webpack`) are now deprecated. Migrate to the `@angular/build` builders (esbuild/application) for your application builds.
+  </step>
+  <step id="22.0.0-ssr-commonengine-deprecated" level="Advanced" phase="during">
+    `CommonEngine` APIs from `@angular/ssr` are deprecated. Migrate to `AngularNodeAppEngine` or `AngularAppEngine` instead.
+  </step>
+  <step id="22.0.0-istanbul-lib-instrument-optional" level="Medium" phase="during">
+    `istanbul-lib-instrument` is now an optional peer dependency. If your project uses Karma with code coverage enabled, ensure `istanbul-lib-instrument` is explicitly installed.
+  </step>
+  <step id="22.0.0-dev-server-port-env-priority" level="Basic" phase="during">
+    `ng serve` now gives the highest priority to the `PORT` environment variable. This value overrides any port configured in `angular.json` or provided via the `--port` flag.
+  </step>
+  <step id="22.0.0-architect-cli-removed" level="Advanced" phase="during">
+    The `@angular-devkit/architect-cli` package is no longer available. Use the `architect` CLI tool from the `@angular-devkit/architect` package instead.
+  </step>
+  <step id="22.0.0-experimental-test-builders-removed" level="Medium" phase="during">
+    The experimental `@angular-devkit/build-angular:jest` and `@angular-devkit/build-angular:web-test-runner` test builders have been removed.
+  </step>
+</update-guide>

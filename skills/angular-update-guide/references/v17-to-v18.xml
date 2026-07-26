@@ -1,0 +1,77 @@
+<update-guide from="17.0" to="18.0" source="angular/angular@5ad823139758b4d3a8a021d378b008c3457f8689">
+  <step id="v18 node support" level="Basic" phase="during">
+    Make sure that you are using a supported version of node.js before you upgrade your application. Angular v18 supports node.js versions: v18.19.0 and newer
+  </step>
+  <step id="v18 ng update" level="Basic" phase="during">
+    In the application's project directory, run `ng update @angular/core@18 @angular/cli@18` to update your application to Angular v18.
+  </step>
+  <step id="update @angular/material" level="Basic" phase="during" material="true">
+    Run `ng update @angular/material@18`.
+  </step>
+  <step id="18.0.0 Upgrade TypeScript" level="Basic" phase="during">
+    Update TypeScript to versions 5.4 or newer.
+  </step>
+  <step id="18.0.0: async has been removed, use `waitForAsync` instead" level="Advanced" phase="during">
+    Replace `async` from `@angular/core` with `waitForAsync`.
+  </step>
+  <step id="18.0.0: Deprecated matchesElement method removed from AnimationDriver" level="Advanced" phase="during">
+    Remove calls to `matchesElement` because it's now not part of `AnimationDriver`.
+  </step>
+  <step id="18.0.0. Use `@angular/core` StateKey and TransferState" level="Medium" phase="during">
+    Import `StateKey` and `TransferState` from `@angular/core` instead of `@angular/platform-browser`.
+  </step>
+  <step id="18.0.0. Opt-in of caching for HTTP requests with auth headers" level="Medium" phase="during">
+    Use `includeRequestsWithAuthHeaders: true` in `withHttpTransferCache` to opt-in of caching for HTTP requests that require authorization.
+  </step>
+  <step id="18.0.0.REMOVE_OBSOLETE_IS_WORKER" level="Advanced" phase="during">
+    Update the application to remove `isPlatformWorkerUi` and `isPlatformWorkerApp` since they were part of platform WebWorker which is now not part of Angular.
+  </step>
+  <step id="18.0.0.FORCE_ZONE_CHANGE_DETECTION" level="Medium" phase="during">
+    Tests may run additional rounds of change detection to fully reflect test state in the DOM. As a last resort, revert to the old behavior by adding `provideZoneChangeDetection({ignoreChangesOutsideZone: true})` to the TestBed providers.
+  </step>
+  <step id="18.0.0: Remove two-way binding expressions in writable bindings" level="Medium" phase="during">
+    Remove expressions that write to properties in templates that use `[(ngModel)]`
+  </step>
+  <step id="18.0.0: Use zones to track pending requests" level="Advanced" phase="during">
+    Remove calls to `Testability` methods `increasePendingRequestCount`, `decreasePendingRequestCount`, and `getPendingRequestCount`. This information is tracked by ZoneJS.
+  </step>
+  <step id="18.0.0: Move shared providers to the routed component" level="Medium" phase="during">
+    Move any environment providers that should be available to routed components from the component that defines the `RouterOutlet` to the providers of `bootstrapApplication` or the `Route` config.
+  </step>
+  <step id="18.0.0 Use RedirectCommand or new NavigationBehaviorOptions" level="Advanced" phase="during">
+    When a guard returns a `UrlTree` as a redirect, the redirecting navigation will now use `replaceUrl` if the initial navigation was also using the `replaceUrl` option. If you prefer the previous behavior, configure the redirect using the new `NavigationBehaviorOptions` by returning a `RedirectCommand` with the desired options instead of `UrlTree`.
+  </step>
+  <step id="18.0.0: Remove deprecated resource cache providers" level="Advanced" phase="during">
+    Remove dependencies of `RESOURCE_CACHE_PROVIDER` since it's no longer part of the Angular runtime.
+  </step>
+  <step id="18.0.0: Update Node.js URL parsing in `ServerPlatformLocation`" level="Advanced" phase="during">
+    In `@angular/platform-server` now `pathname` is always suffixed with `/` and the default ports for http: and https: respectively are 80 and 443.
+  </step>
+  <step id="18.0.0. Use absolute URLs" level="Medium" phase="during">
+    Provide an absolute `url` instead of using `useAbsoluteUrl` and `baseUrl` from `PlatformConfig`.
+  </step>
+  <step id="18.0.0. Switch from `platformDynamicServer` to `platformServer`." level="Advanced" phase="during">
+    Replace the usage of `platformDynamicServer` with `platformServer`. Also, add an `import @angular/compiler`.
+  </step>
+  <step id="18.0.0. Remove `ServerTransferStateModule` from app imports" level="Medium" phase="during">
+    Remove all imports of `ServerTransferStateModule` from your application. It is no longer needed.
+  </step>
+  <step id="18.0.0. Update `Route.redirectTo` to accept functions" level="Advanced" phase="during">
+    `Route.redirectTo` can now include a function in addition to a string. Any code which reads `Route` objects directly and expects `redirectTo` to be a string may need to update to account for functions as well.
+  </step>
+  <step id="18.0.0: Guards can return `RedirectCommand`" level="Advanced" phase="during">
+    `Route` guards and resolvers can now return a `RedirectCommand` object in addition to a `UrlTree` and `boolean`. Any code which reads `Route` objects directly and expects only `boolean` or `UrlTree` may need to update to account for `RedirectCommand` as well.
+  </step>
+  <step id="18.0.0: Mark `OnPush` views dirty" level="Medium" phase="during">
+    For any components using `OnPush` change detection, ensure they are properly marked dirty to enable host binding updates.
+  </step>
+  <step id="18.0.0-Refresh-Newly-Created-Views" level="Advanced" phase="during">
+    Be aware that newly created views or views marked for check and reattached during change detection are now guaranteed to be refreshed in that same change detection cycle.
+  </step>
+  <step id="18.0.0: `ComponentFixture.whenStable` matches `ApplicationRef.isStable`" level="Advanced" phase="during">
+    After aligning the semantics of `ComponentFixture.whenStable` and `ApplicationRef.isStable`, your tests may wait longer when using `whenStable`.
+  </step>
+  <step id="18.0.0. `ComponentFixture.autoDetect` behavior more closely matches Application behavior" level="Advanced" phase="during">
+    You may experience tests failures if you have tests that rely on change detection execution order when using `ComponentFixture.autoDetect` because it now executes change detection for fixtures within `ApplicationRef.tick`. For example, this will cause test fixture to refresh before any dialogs that it creates whereas this may have been the other way around in the past.
+  </step>
+</update-guide>

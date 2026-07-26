@@ -1,0 +1,56 @@
+<update-guide from="11.0" to="12.0" source="angular/angular@5ad823139758b4d3a8a021d378b008c3457f8689">
+  <step id="v12 ng update" level="Basic" phase="during">
+    Run `ng update @angular/core@12 @angular/cli@12` which should bring you to version 12 of Angular.
+  </step>
+  <step id="update @angular/material" level="Basic" phase="during" material="true">
+    Run `ng update @angular/material@12`.
+  </step>
+  <step id="v12 versions" level="Basic" phase="during">
+    Angular now requires [TypeScript 4.2](https://devblogs.microsoft.com/typescript/announcing-typescript-4-2/). `ng update` will update you automatically.
+  </step>
+  <step id="v12 browser support" level="Basic" phase="during">
+    IE11 support has been deprecated. Find details in the [RFC for IE11 removal](https://github.com/angular/angular/issues/41840).
+  </step>
+  <step id="v12 minimum  Node.js version" level="Basic" phase="during">
+    You can no longer use Angular with Node.js version 10 or older
+  </step>
+  <step id="v12 `XhrFactory` relocation" level="Medium" phase="during">
+    Change the import of `XhrFactory` from `@angular/common/http` to `@angular/common`.
+  </step>
+  <step id="v12 i18n message ids" level="Medium" phase="during">
+    If you rely on legacy i18n message IDs use the `localize-migrate` tool to [move away from them](https://angular.io/guide/migration-legacy-message-id).
+  </step>
+  <step id="v12 deprecates `emitDistinctChangesOnly`" level="Medium" phase="during">
+    If you are using `emitDistinctChangesOnly` to configure `@ContentChildren` and `@ViewChildren` queries, you may need to update its value to `false` to align with its previous behavior. In v12 `emitDistinctChangesOnly` has default value `true`, and in future releases we will remove this configuration option to prevent triggering of unnecessary changes.
+  </step>
+  <step id="v12 prod by default" level="Medium" phase="during">
+    You can run the optional migration for enabling production builds by default `ng update @angular/cli@12 --migrate-only production-by-default`.
+  </step>
+  <step id="v12 min and max form attributes" level="Advanced" phase="during">
+    If you  use Angular forms, `min` and `max` attributes on `&lt;input type="number"&gt;` will now trigger validation logic.
+  </step>
+  <step id="v12 `emitEvent` in `FormArray` and `FormGroup`" level="Advanced" phase="during">
+    If your app has custom classes that extend `FormArray` or `FormGroup` classes and override the above-mentioned methods, you may need to update your implementation
+  </step>
+  <step id="v12 zone.js minimum version" level="Advanced" phase="during">
+    Update zone.js to version 0.11.4. `ng update` will update this dependency automatically.
+  </step>
+  <step id="v12 `HttpParams` method params update" level="Advanced" phase="during">
+    If you extend the `HttpParams` class you may have to update the signature of its method to reflect changes in the parameter types.
+  </step>
+  <step id="v12 `routerLinkActiveOptions`" level="Advanced" phase="during">
+    `routerLinkActiveOptions` property of `RouterLinkActive` now has a more specific type. You may need to update code accessing this property to align with the changes.
+  </step>
+  <step id="v12 `APP_INITIALIZER` callback types" level="Advanced" phase="during">
+    The initializer callbacks now have more specific return types, which may require update of your code if you are getting an `APP_INITIALIZER` instance via `Injector.get` or `TestBed.inject`.
+  </step>
+  <step id="v12 fragment typings" level="Advanced" phase="during">
+    The router fragments now could be `null`. Add `null` checks to avoid TypeScript failing with type errors.
+  </step>
+  <step id="v12 `ng.getDirectives`" level="Advanced" phase="during">
+    Make sure you don't rely on `ng.getDirectives` throwing an error if it can't find a directive associated with a particular DOM node.
+  </step>
+  <step id="v12 `optimization.styles.inlineCritical`" level="Advanced" phase="during">
+    Check out `optimization.styles.inlineCritical` option in your angular.json file. It now defaults to `true`. Remember that the whole `optimization` option can be set as boolean which will set all the suboptions to defaults.
+  </step>
+</update-guide>

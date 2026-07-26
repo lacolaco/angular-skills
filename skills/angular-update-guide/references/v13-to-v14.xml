@@ -1,0 +1,86 @@
+<update-guide from="13.0" to="14.0" source="angular/angular@5ad823139758b4d3a8a021d378b008c3457f8689">
+  <step id="v14 ng update" level="Basic" phase="during">
+    Run `ng update @angular/core@14 @angular/cli@14` which should bring you to version 14 of Angular.
+  </step>
+  <step id="update @angular/material" level="Basic" phase="during" material="true">
+    Run `ng update @angular/material@14`.
+  </step>
+  <step id="TypeScript 4.6" level="Basic" phase="during">
+    Angular now uses TypeScript 4.6, read more about [any potential breaking changes](https://devblogs.microsoft.com/typescript/announcing-typescript-4-6/).
+  </step>
+  <step id="v14 node" level="Basic" phase="during">
+    Make sure you are using [Node 14.15.0 or later](https://www.hostingadvice.com/how-to/update-node-js-latest-version/)
+  </step>
+  <step id="v14 strict forms" level="Medium" phase="during">
+    Form models now require a generic type parameter. For gradual migration you can opt-out using the untyped version of the form model classes.
+  </step>
+  <step id="v14 aotSummaries" level="Medium" phase="during">
+    Remove `aotSummaries` from `TestBed` since Angular no longer needs them in Ivy.
+  </step>
+  <step id="v14 MatVertical and Horizontal Stepper" level="Medium" phase="during" material="true">
+    If you are using `MatVerticalStepper` or `MatHorizontalStepper` make sure you switch to `MatStepper`.
+  </step>
+  <step id="v14 JSONP" level="Medium" phase="during">
+    Remove headers from JSONP requests. JSONP does not supports headers and if specified the HTTP module will now throw an error rather than ignoring them.
+  </step>
+  <step id="v14 resolvers" level="Medium" phase="during">
+    Resolvers now will take the first emitted value by an observable and after that proceed to navigation to better align with other guards rather than taking the last emitted value.
+  </step>
+  <step id="v14 deprecate protractor entry" level="Advanced" phase="during" material="true">
+    The deprecated `angular/cdk/testing/protractor` entry point is now removed.
+  </step>
+  <step id="v14 chipInput" level="Advanced" phase="during" material="true">
+    Make sure you specify `chipInput` of `MatChipInputEvent` because it is now required.
+  </step>
+  <step id="v14 mixinErrorState" level="Advanced" phase="during" material="true">
+    You need to implement `stateChanges` class member in abstractions using `mixinErrorState` because the mixin no longer provides it.
+  </step>
+  <step id="v14 CdkStepper orientation" level="Advanced" phase="during" material="true">
+    Use `CdkStepper.orientation` instead of `CdkStepper._orientation`.
+  </step>
+  <step id="v14 CdkStepper and MatStepper" level="Advanced" phase="during" material="true">
+    If you are extending or using `CdkStepper` or `MatStepper` in the constructor you should no longer pass the `_document` parameter since it is now removed.
+  </step>
+  <step id="v14 mat-list-item-avatar" level="Advanced" phase="during" material="true">
+    Rename the `mat-list-item-avatar` CSS class to `mat-list-item-with-avatar`.
+  </step>
+  <step id="v14 MatSelectionListChange.option" level="Advanced" phase="during" material="true">
+    Use `MatSelectionListChange.options` rather than `MatSelectionListChange.option`.
+  </step>
+  <step id="v14 getHarnessLoaderForContent" level="Advanced" phase="during" material="true">
+    Use `getChildLoader(MatListItemSection.CONTENT)` rather than `getHarnessLoaderForContent`.
+  </step>
+  <step id="v14 MatSelectionList" level="Advanced" phase="during" material="true">
+    If you are using `MatSelectionList` make sure you pass `_focusMonitor` in its constructor because it is now required. Additionally, this class no longer has `tabIndex` property and a `tabIndex` constructor parameter.
+  </step>
+  <step id="v14 initialNavigation" level="Advanced" phase="during">
+    Update `initialNavigation: 'enabled'` to `initialNavigation: 'enabledBlocking'`.
+  </step>
+  <step id="v14 Route.pathMatch" level="Advanced" phase="during">
+    If you are defining routes with `pathMatch`, you may have to cast it to `Route` or `Routes` explicitly. `Route.pathMatch` is no longer compatible with `string` type.
+  </step>
+  <step id="v14 stricter LoadChildrenCallback" level="Advanced" phase="during">
+    The promise returned by `LoadChildrenCallback` now has a stricter type parameter `Type&lt;any&gt;|NgModuleFactory&lt;any&gt;` rather than `any`.
+  </step>
+  <step id="v14 router scheduling" level="Advanced" phase="during">
+    The router does no longer schedule redirect navigation within a `setTimeout`. Make sure your tests do not rely on this behavior.
+  </step>
+  <step id="v14 LocationStrategy" level="Advanced" phase="during">
+    Implementing the `LocationStrategy` interface now requires definition of `getState()`.
+  </step>
+  <step id="v14 http queries" level="Advanced" phase="during">
+    Sending `+` as part of a query no longer requires workarounds since `+` no longer sends a space.
+  </step>
+  <step id="v14 AnimationDriver.getParentElement" level="Advanced" phase="during">
+    Implementing `AnimationDriver` now requires the `getParentElement` method.
+  </step>
+  <step id="v14 invalid config" level="Advanced" phase="during">
+    Invalid route configurations of lazy-loaded modules will now throw an error rather than being ignored.
+  </step>
+  <step id="v14 router resolver" level="Advanced" phase="during">
+    Remove the `resolver` from `RouterOutletContract.activateWith` function and the `resolver` from `OutletContext` class since factory resolvers are no longer needed.
+  </step>
+  <step id="v14 initialUrl" level="Advanced" phase="during">
+    `Router.initialUrl` accepts only `UrlTree` to prevent a misuse of the API by assigning a `string` value.
+  </step>
+</update-guide>

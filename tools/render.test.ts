@@ -43,13 +43,13 @@ test('computeMajorPairs excludes majors before v6', () => {
 
 test('renderReferenceIndex gains one line when a new major is appended', () => {
   const before = renderReferenceIndex(V6_TO_V8);
-  assert.equal(before, '- `references/v6-to-v7.md`\n- `references/v7-to-v8.md`');
+  assert.equal(before, '- `references/v6-to-v7.xml`\n- `references/v7-to-v8.xml`');
 
   const withV9: Version[] = [...V6_TO_V8, {name: '9.0', number: 900}];
   const after = renderReferenceIndex(withV9);
   assert.equal(
     after,
-    '- `references/v6-to-v7.md`\n- `references/v7-to-v8.md`\n- `references/v8-to-v9.md`',
+    '- `references/v6-to-v7.xml`\n- `references/v7-to-v8.xml`\n- `references/v8-to-v9.xml`',
   );
 });
 
@@ -75,7 +75,7 @@ const SKILL_MD_FIXTURE = [
   '## Available references',
   '',
   '<!-- REFERENCES:START -->',
-  '- `references/v6-to-v7.md`',
+  '- `references/v6-to-v7.xml`',
   '<!-- REFERENCES:END -->',
   '',
   'Trailing note, must survive untouched.',
@@ -95,8 +95,8 @@ test('updateSkillMd rewrites the references index and commit sha, nothing else',
       '## Available references',
       '',
       '<!-- REFERENCES:START -->',
-      '- `references/v6-to-v7.md`',
-      '- `references/v7-to-v8.md`',
+      '- `references/v6-to-v7.xml`',
+      '- `references/v7-to-v8.xml`',
       '<!-- REFERENCES:END -->',
       '',
       'Trailing note, must survive untouched.',

@@ -1,0 +1,53 @@
+<update-guide from="18.0" to="19.0" source="angular/angular@5ad823139758b4d3a8a021d378b008c3457f8689">
+  <step id="19.0.0_ng_update" level="Basic" phase="during">
+    In the application's project directory, run `ng update @angular/core@19 @angular/cli@19` to update your application to Angular v19.
+  </step>
+  <step id="update @angular/material" level="Basic" phase="during" material="true">
+    Run `ng update @angular/material@19`.
+  </step>
+  <step id="19.0.0-standalone-declarations" level="Basic" phase="during">
+    Angular directives, components and pipes are now standalone by default. Specify "standalone: false" for declarations that are currently declared in an NgModule. The Angular CLI will automatically update your code to reflect that.
+  </step>
+  <step id="19.0.0-remove-this" level="Medium" phase="during">
+    Remove `this.` prefix when accessing template reference variables. For example, refactor `&lt;div #foo&gt;&lt;/div&gt;{{ this.foo }}` to `&lt;div #foo&gt;&lt;/div&gt;{{ foo }}`
+  </step>
+  <step id="19.0.0-remove-browser-module-with-server-transition" level="Basic" phase="during">
+    Replace usages of `BrowserModule.withServerTransition()` with injection of the `APP_ID` token to set the application `id` instead.
+  </step>
+  <step id="19.0.0-remove-key-value-differs-factories" level="Advanced" phase="during">
+    The `factories` property in `KeyValueDiffers` has been removed.
+  </step>
+  <step id="19.0.0_localize_builder_project_option" level="Medium" phase="during">
+    In angular.json, replace the "name" option with "project" for the `@angular/localize` builder.
+  </step>
+  <step id="19.0.0_rename_experimental_pending_tasks" level="Advanced" phase="during">
+    Rename `ExperimentalPendingTasks` to `PendingTasks`.
+  </step>
+  <step id="19.0.0.1" level="Medium" phase="during">
+    Update tests that relied on the `Promise` timing of effects to use `await whenStable()` or call `.detectChanges()` to trigger effects. For effects triggered during change detection, ensure they don't depend on the application being fully rendered or consider using `afterRenderEffect()`. Tests using faked clocks may need to fast-forward/flush the clock.
+  </step>
+  <step id="19.0.0.2" level="Basic" phase="during">
+    Upgrade to TypeScript version 5.5 or later.
+  </step>
+  <step id="19.0.0-timers-in-zone" level="Advanced" phase="during">
+    Update tests using `fakeAsync` that rely on specific timing of zone coalescing and scheduling when a change happens outside the Angular zone (hybrid mode scheduling) as these timers are now affected by `tick` and `flush`.
+  </step>
+  <step id="19.0.0-render-default-fallback" level="Medium" phase="during">
+    When using `createComponent` API and not passing content for the first `ng-content`, provide `document.createTextNode('')` as a `projectableNode` to prevent rendering the default fallback content.
+  </step>
+  <step id="19.0.0-hybrid-scheduler-timing" level="Advanced" phase="during">
+    Update tests that rely on specific timing or ordering of change detection around custom elements, as the timing may have changed due to the switch to the hybrid scheduler.
+  </step>
+  <step id="19.0.0-router-error-handler" level="Basic" phase="during">
+    Migrate from using `Router.errorHandler` to `withNavigationErrorHandler` from `provideRouter` or `errorHandler` from `RouterModule.forRoot`.
+  </step>
+  <step id="19.0.0-testbed-error-handling" level="Advanced" phase="during">
+    Update tests to handle errors thrown during `ApplicationRef.tick` by either triggering change detection synchronously or rejecting outstanding `ComponentFixture.whenStable` promises.
+  </step>
+  <step id="19.0.0-update-resolve-interface-return-type" level="Medium" phase="during">
+    Update usages of `Resolve` interface to include `RedirectCommand` in its return type.
+  </step>
+  <step id="19.0.0-update-fakeasync-to-flush-pending-timers" level="Advanced" phase="during">
+    `fakeAsync` will flush pending timers by default. For tests that require the previous behavior, explicitly pass `{flush: false}` in the options parameter.
+  </step>
+</update-guide>

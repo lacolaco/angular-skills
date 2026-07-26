@@ -39,24 +39,32 @@ const UNRELEASED_WARNING =
   'Plans for releases after the current major release are not finalized and may change. ' +
   'These recommendations are based on scheduled deprecations.';
 
-/** Mirrors update.component.ts `optionList` tags (ngUpgrade / material / windows). */
-function optionTags(step: Step): string[] {
-  const tags: string[] = [];
-  if (step.ngUpgrade === true) tags.push('[ngUpgrade only]');
-  if (step.material === true) tags.push('[Angular Material only]');
-  if (step.windows === true) tags.push('[Windows only]');
-  if (step.windows === false) tags.push('[non-Windows only]');
-  return tags;
+/** Escapes text-node content: `&`, `<`, `>`. Order matters — `&` must go first. */
+function escapeText(text: string): string {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-function renderItem(step: Step): string {
-  const tags = [`[${LEVEL_NAMES[step.level]}]`, ...optionTags(step)].join(' ');
-  return `- **${tags}** ${step.action}\n  \`${step.step}\``;
+/** Escapes attribute values: text-node escaping plus `"` (attributes are double-quoted). */
+function escapeAttr(text: string): string {
+  return escapeText(text).replace(/"/g, '&quot;');
 }
 
-function renderSection(title: string, steps: Step[]): string {
-  if (steps.length === 0) return '';
-  return `## ${title}\n\n${steps.map(renderItem).join('\n\n')}\n`;
+type Phase = 'before' | 'during' | 'after';
+
+/** Attribute order: id, level, phase, then option attributes in Step field order.
+ * An option attribute is omitted unless it's meaningful — `windows` is the one
+ * exception, since `windows="false"` (non-Windows only) is itself information. */
+function renderStepElement(step: Step, phase: Phase): string {
+  const attrs = [
+    `id="${escapeAttr(step.step)}"`,
+    `level="${LEVEL_NAMES[step.level]}"`,
+    `phase="${phase}"`,
+  ];
+  if (step.ngUpgrade === true) attrs.push('ngUpgrade="true"');
+  if (step.material === true) attrs.push('material="true"');
+  if (step.windows === true) attrs.push('windows="true"');
+  if (step.windows === false) attrs.push('windows="false"');
+  return `  <step ${attrs.join(' ')}>\n    ${escapeText(step.action)}\n  </step>`;
 }
 
 interface Bucketed {
@@ -93,28 +101,26 @@ function renderStep(
   to: Version,
   isLatest: boolean,
 ): string {
-  const {before, during, after} = classify(data.recommendations, from.number, to.number);
-  const fromMajor = Math.floor(from.number / 100);
-  const toMajor = Math.floor(to.number / 100);
+  const bucketed = classify(data.recommendations, from.number, to.number);
+  const source = `${data.source.repo}@${data.source.commitSha}`;
 
   const parts: string[] = [];
-  parts.push(`# Angular ${fromMajor} → ${toMajor}`);
-  parts.push('');
-  parts.push(`Generated from angular/angular @ ${data.source.commitSha}`);
-  parts.push('');
+  parts.push(
+    `<update-guide from="${escapeAttr(from.name)}" to="${escapeAttr(to.name)}" source="${escapeAttr(source)}">`,
+  );
   if (isLatest) {
-    parts.push(`> ${UNRELEASED_WARNING}`);
-    parts.push('');
+    parts.push('  <unreleased-warning>');
+    parts.push(`    ${escapeText(UNRELEASED_WARNING)}`);
+    parts.push('  </unreleased-warning>');
   }
+  for (const phase of ['before', 'during', 'after'] as const) {
+    for (const step of bucketed[phase]) {
+      parts.push(renderStepElement(step, phase));
+    }
+  }
+  parts.push('</update-guide>');
 
-  const sections = [
-    renderSection('Before the update', before),
-    renderSection('During the update', during),
-    renderSection('After the update', after),
-  ].filter((section) => section.length > 0);
-  parts.push(sections.join('\n'));
-
-  return parts.join('\n').trimEnd() + '\n';
+  return parts.join('\n') + '\n';
 }
 
 export interface MajorPair {
@@ -146,7 +152,7 @@ export function renderReferenceIndex(versions: Version[]): string {
     .map(({from, to}) => {
       const fromMajor = Math.floor(from.number / 100);
       const toMajor = Math.floor(to.number / 100);
-      return `- \`references/v${fromMajor}-to-v${toMajor}.md\``;
+      return `- \`references/v${fromMajor}-to-v${toMajor}.xml\``;
     })
     .join('\n');
 }
@@ -184,7 +190,7 @@ function main() {
   for (const {from, to} of pairs) {
     const fromMajor = Math.floor(from.number / 100);
     const toMajor = Math.floor(to.number / 100);
-    const outputPath = path.join(OUTPUT_DIR, `v${fromMajor}-to-v${toMajor}.md`);
+    const outputPath = path.join(OUTPUT_DIR, `v${fromMajor}-to-v${toMajor}.xml`);
     writeFileSync(outputPath, renderStep(data, from, to, to.number === maxVersionNumber), 'utf-8');
   }
 

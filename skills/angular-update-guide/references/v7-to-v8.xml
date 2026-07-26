@@ -1,0 +1,68 @@
+<update-guide from="7.0" to="8.0" source="angular/angular@5ad823139758b4d3a8a021d378b008c3457f8689">
+  <step id="Renderer" level="Advanced" phase="before">
+    Anywhere you use Renderer, now use Renderer2
+  </step>
+  <step id="Http" level="Basic" phase="before">
+    If you use the legacy `HttpModule` and the `Http` service, switch to `HttpClientModule` and the `HttpClient` service. HttpClient simplifies the default ergonomics (you don't need to map to JSON anymore) and now supports typed return values and interceptors. Read more on [angular.dev](https://angular.dev/guide/http).
+  </step>
+  <step id="remove rxjs-compat" level="Medium" phase="before">
+    Once you and all of your dependencies have updated to RxJS 6, remove `rxjs-compat`.
+  </step>
+  <step id="use files instead of versionedFiles" level="Medium" phase="before">
+    If you use the Angular Service worker, migrate any `versionedFiles` to the `files` array. The behavior is the same.
+  </step>
+  <step id="v7 material deprecations" level="Advanced" phase="before" material="true">
+    Stop using `matRippleSpeedFactor` and `baseSpeedFactor` for ripples, using Animation config instead.
+  </step>
+  <step id="v8 update" level="Basic" phase="during" windows="false">
+    Update to version 8 of the core framework and CLI by running `NG_DISABLE_VERSION_CHECK=1 npx @angular/cli@8 update @angular/cli@8 @angular/core@8` in your terminal and review and commit the changes.
+  </step>
+  <step id="v8 update" level="Basic" phase="during" windows="true">
+    Update to version 8 of the core framework and CLI by running `cmd /C "set "NG_DISABLE_VERSION_CHECK=1" &amp;&amp; npx @angular/cli@8 update @angular/cli@8 @angular/core@8"` in your terminal and review and commit the changes.
+  </step>
+  <step id="use ::ng-deep instead of /deep/" level="Basic" phase="during">
+    Replace `/deep/` with `::ng-deep` in your styles, [read more about angular component styles and ::ng-deep](https://angular.io/guide/component-styles#deprecated-deep--and-ng-deep). `/deep/` and `::ng-deep` both are deprecated but using `::ng-deep` is preferred until the shadow-piercing descendant combinator is [removed from browsers and tools](https://chromestatus.com/feature/5045542597951488) completely.
+  </step>
+  <step id="TypeScript 3.4" level="Basic" phase="during">
+    Angular now uses TypeScript 3.4, [read more about errors that might arise from improved type checking](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html).
+  </step>
+  <step id="node 10" level="Basic" phase="during">
+    Make sure you are using [Node 10 or later](https://www.hostingadvice.com/how-to/update-node-js-latest-version/).
+  </step>
+  <step id="Differential Loading" level="Basic" phase="during">
+    The CLI's build command now automatically creates a modern ES2015 build with minimal polyfills and a compatible ES5 build for older browsers, and loads the appropriate file based on the browser.  You may opt-out of this change by setting your `target` back to `es5` in your `tsconfig.json`. Learn more on [angular.io](https://angular.io/guide/deployment#differential-loading).
+  </step>
+  <step id="CLI Telemetry" level="Basic" phase="during">
+    When using new versions of the CLI, you will be asked if you want to opt-in to share your CLI usage data. You can also add your own Google Analytics account. This lets us make better decisions about which CLI features to prioritize, and measure the impact of our improvements. Learn more on [angular.io](https://angular.io/analytics).
+  </step>
+  <step id="static query timing" level="Basic" phase="during">
+    If you use `ViewChild` or `ContentChild`, we're updating the way we resolve these queries to give developers more control. You must now specify that change detection should run before results are set. Example: `@ContentChild('foo', {static: false}) foo !: ElementRef;`. `ng update` will update your queries automatically, but it will err on the side of making your queries `static` for compatibility. Learn more on [angular.io](https://angular.io/guide/static-query-migration).
+  </step>
+  <step id="v8 material update" level="Basic" phase="during" material="true" windows="false">
+    Update Angular Material to version 8 by running `NG_DISABLE_VERSION_CHECK=1 npx @angular/cli@8 update @angular/material@8` in your terminal.
+  </step>
+  <step id="v8 material update" level="Basic" phase="during" material="true" windows="true">
+    Update Angular Material to version 8 by running `cmd /C "set "NG_DISABLE_VERSION_CHECK=1" &amp;&amp; npx @angular/cli@8 update @angular/material@8"` in your terminal.
+  </step>
+  <step id="node-sass" level="Advanced" phase="during">
+    We have switched from the native Sass compiler to the JavaScript compiler. To switch back to the native version, install it as a devDependency: `npm install node-sass --save-dev`.
+  </step>
+  <step id="schematics async" level="Advanced" phase="during">
+    If you are building your own Schematics, they have previously been *potentially* asynchronous. As of 8.0, all schematics will be asynchronous.
+  </step>
+  <step id="deep imports" level="Basic" phase="after" material="true">
+    Instead of importing from `@angular/material`, you should import deeply from the specific component. E.g. `@angular/material/button`. `ng update` will do this automatically for you.
+  </step>
+  <step id="new loadChildren" level="Basic" phase="after">
+    For lazy loaded modules via the router, make sure you are [using dynamic imports](https://angular.io/guide/deprecations#loadchildren-string-syntax). Importing via string is removed in v9. `ng update` should take care of this automatically. Learn more on [angular.io](https://angular.io/guide/deprecations#loadchildren-string-syntax).
+  </step>
+  <step id="platform deprecated" level="Advanced" phase="after">
+    We are deprecating support for `@angular/platform-webworker`, as it has been incompatible with the CLI. Running Angular's rendering architecture in a web worker did not meet developer needs. You can still use web workers with Angular. Learn more in our [web worker guide](https://v9.angular.io/guide/web-worker). If you have use cases where you need this, let us know at devrel@angular.io!
+  </step>
+  <step id="wtf" level="Advanced" phase="after">
+    Support for web tracing framework in Angular was deprecated in version 8. You should stop using any of the `wtf*` APIs. To do performance tracing, we recommend using [browser performance tools](https://developers.google.com/web/tools/lighthouse/audits/user-timing).
+  </step>
+  <step id="es5browser" level="Medium" phase="after">
+    Remove any `es5BrowserSupport` flags in your `angular.json` and set your `target` to `es2015` in your `tsconfig.json`. Angular now uses your browserslist to determine if an ES5 build is needed. `ng update` will migrate you automatically.
+  </step>
+</update-guide>
