@@ -2,9 +2,7 @@
 
 [日本語](./README.ja.md)
 
-Agent skills for working with Angular.
-
-These do not replace the official [`angular/skills`](https://github.com/angular/skills). They cover ground the official skills leave open.
+Agent skills for working with Angular. These do not replace the official [`angular/skills`](https://github.com/angular/skills); they cover ground the official skills leave open.
 
 **Unofficial.** This repository is not affiliated with, endorsed by, or supported by Google or the Angular team.
 

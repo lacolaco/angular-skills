@@ -3,9 +3,7 @@
 [English](./README.md)
 
 Angular を扱うための Agent Skill を集めたリポジトリです。
-
-ここにあるスキルは、公式の [`angular/skills`](https://github.com/angular/skills) を代替するものではありません。
-公式スキルがカバーしていない範囲を補うためのものです。
+公式の [`angular/skills`](https://github.com/angular/skills) を代替するものではなく、公式スキルがカバーしていない範囲を補います。
 
 **非公式です。** このリポジトリは Google および Angular チームとの提携も、承認も、サポートも受けていません。
 
