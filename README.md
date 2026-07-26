@@ -41,8 +41,6 @@ Reference data is also useful before committing to anything:
 
 > What breaks between Angular 20 and 21 for this codebase? Don't change anything yet — I want to see the list first.
 
-If the agent is going to run the upgrade rather than just describe it, pair this with whatever procedure you already trust for `ng update`. That part is deliberately not here.
-
 ## Requirements
 
 - Nothing at the install site. The skills are plain text files with no runtime dependency.
