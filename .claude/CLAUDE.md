@@ -63,9 +63,4 @@ Each is recorded with its reasoning under "Opinionated choices" in the README. C
 
 ## Where the reasoning is recorded
 
-Design decisions, their rationale, and the options that were rejected live in Linear. Do not copy them here.
-
-- Decision map: [LACO-232](https://linear.app/lacolaco/issue/LACO-232)
-- Implementation tree: [LACO-243](https://linear.app/lacolaco/issue/LACO-243)
-
-The resolving comment on each issue holds the decision and why. If a question comes up that the map does not cover, raise it there rather than settling it alone.
+Design decisions, their rationale, and the options that were rejected are tracked outside this repository. If a question comes up that this file does not settle, raise it with the maintainer instead of settling it alone.
