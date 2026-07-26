@@ -50,6 +50,7 @@ The upstream SHA lives only in `SKILL.md`, never in the reference files, so thos
 ## Constraints on changes
 
 - **Keep each `skills/<name>/` subtree liftable on its own.** These skills are meant to be proposable for adoption upstream, which the naming, the MIT license, and the layout all follow from. Shipped files must not depend on anything outside their own directory.
+- **Do not take TypeScript 7.** `extract.ts` imports the compiler API as `import ts from 'typescript'`. In v7 the package root exports only `lib/version.cjs` and the AST surface moved to `typescript/unstable/ast`, which its own name says is not settled. Staying on the 6.x line keeps the classic API. Note that 6.x no longer pulls in `@types/*` automatically, which is why `tsconfig.json` names `node` explicitly.
 - **Commit hand edits before running anything that can revert them.** Both the build and `git checkout -- <path>` destroy uncommitted work under `skills/`.
 - **Verify a change to the output format against the previous output, not by eye.** Take the old files from git history, strip only the attribute you meant to change, and confirm the result matches in order. Confirm the item count (currently 378) is unchanged.
 
