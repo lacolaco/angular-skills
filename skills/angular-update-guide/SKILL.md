@@ -24,6 +24,28 @@ The files under `references/` are generated from `adev/src/app/features/update/r
 
 Each file is an `<update-guide>` document; each item is a `<step>` element. Its `phase` attribute (`before` / `during` / `after`) says when it applies, in that document order. Its `id` attribute is upstream's identifier for it — use it when referring to a specific item.
 
+```xml
+<update-guide from="21.0" to="22.0" source="angular/angular@5ad8231">
+  <unreleased-warning>
+    Plans for releases after the current major release are not finalized and may change. ...
+  </unreleased-warning>
+
+  <step id="22.0.0_ng_update" level="Basic" phase="during">
+    In the application's project directory, run `ng update @angular/core@22 @angular/cli@22` ...
+  </step>
+
+  <step id="update @angular/material" level="Basic" phase="during" material="true">
+    Run `ng update @angular/material@22`.
+  </step>
+
+  <step id="v8 update" level="Basic" phase="during" windows="false">
+    Update Angular Material to version 8 by running `NG_DISABLE_VERSION_CHECK=1 npx ...` in your terminal.
+  </step>
+</update-guide>
+```
+
+A step's text is upstream's own wording, carried over verbatim; it may contain Markdown and occasionally escaped HTML. Conditions stack, so a step can carry more than one — `material="true" windows="true"` applies only to an Angular Material project on Windows. `<unreleased-warning>` appears only in the file for a major that upstream has not shipped yet.
+
 ## Attributes
 
 `level` is upstream's vocabulary. It is **a dial for how much detail to show, not a measure of how hard the work is**:
