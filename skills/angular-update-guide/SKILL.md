@@ -19,8 +19,9 @@ The files under `references/` are generated from `adev/src/app/features/update/r
 ## How to use
 
 1. Read `@angular/core` in the project's `package.json` to determine the current major version.
-2. Plan **one major at a time**. Upstream: "You can't run `ng update` to update Angular applications more than one major version at a time." Going from v16 to v19 is three separate steps, each with its own reference file.
-3. For each step, read `references/v{N}-to-v{N+1}.xml`.
+2. Determine which conditions the project meets, so that conditional items can be resolved without asking: `@angular/material` in its dependencies, `@angular/upgrade` for ngUpgrade, and whether the host platform is Windows.
+3. Plan **one major at a time**. Upstream: "You can't run `ng update` to update Angular applications more than one major version at a time." Going from v16 to v19 is three separate steps, each with its own reference file.
+4. For each step, read `references/v{N}-to-v{N+1}.xml` and keep the items that apply: every item carrying no condition attribute, plus those whose conditions the project meets. Report a dropped item only if asked for the full list.
 
 Each file is an `<update-guide>` document; each item is a `<step>` element. Its `phase` attribute (`before` / `during` / `after`) says when it applies, in that document order. Its `id` attribute is upstream's identifier for it — use it when referring to a specific item.
 
@@ -58,7 +59,7 @@ So `level="Basic"` means *everyone needs to see this*, not *this is easy*. A `Ba
 
 `ngUpgrade`, `material`, and `windows` mark items that apply only under a condition; they're absent otherwise. `windows` is the exception where the negative case is also written out: `windows="true"` applies only on Windows, `windows="false"` applies only on platforms other than Windows (the same instruction often appears twice, once per value, with different shell syntax).
 
-**These files are not pre-filtered.** Every item is present at every level and for every option. Decide what applies by inspecting the actual project — its `package.json`, its source, the host platform — rather than by trusting an assumption about which items matter.
+**These files are not pre-filtered.** Every item is present at every level and for every option; the filtering is step 2's job, and it resolves against the project itself rather than an assumption about which items matter.
 
 ## Available references
 
