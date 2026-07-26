@@ -6,7 +6,7 @@ const SKILL = 'angular-update-guide';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, '..', '..');
-const DATA_PATH = path.join(REPO_ROOT, 'data', SKILL, 'recommendations.json');
+
 const SKILL_DIR = path.join(REPO_ROOT, 'skills', SKILL);
 const OUTPUT_DIR = path.join(SKILL_DIR, 'references');
 const SKILL_MD_PATH = path.join(SKILL_DIR, 'SKILL.md');
@@ -27,7 +27,7 @@ export interface Version {
   number: number;
 }
 
-interface RecommendationsData {
+export interface RecommendationsData {
   source: {repo: string; path: string; commitSha: string};
   license: string;
   recommendations: Step[];
@@ -182,9 +182,7 @@ export function updateSkillMd(skillMdContent: string, versions: Version[], commi
   return content;
 }
 
-function main() {
-  const data: RecommendationsData = JSON.parse(readFileSync(DATA_PATH, 'utf-8'));
-
+export function render(data: RecommendationsData): void {
   const pairs = computeMajorPairs(data.versions);
   const maxVersionNumber = Math.max(...data.versions.map((v) => v.number));
 
@@ -202,9 +200,4 @@ function main() {
 
   console.log(`wrote ${pairs.length} reference files to ${OUTPUT_DIR}`);
   console.log(`updated ${SKILL_MD_PATH}`);
-}
-
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
-if (isMain) {
-  main();
 }

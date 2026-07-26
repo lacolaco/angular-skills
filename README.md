@@ -46,13 +46,12 @@ Everything that belongs to one skill is scoped under its name, so a second skill
 
 `upstream/angular` is a git submodule pinned to a specific angular/angular commit — the repository declares exactly which upstream commit it was built from. It's checked out sparse (only `adev/src/app/features/update`) since angular/angular is a large monorepo; see `.gitmodules`.
 
-A skill's build reads the Update Guide sources out of the submodule and writes its reference files, by way of an intermediate JSON under `data/` that is a build artifact and stays out of git. A daily workflow advances the submodule, regenerates, and opens a pull request only when the references actually change; rendering is deterministic, so a diff means upstream moved.
+A skill's build reads the Update Guide sources out of the submodule and writes its reference files in one pass. A daily workflow advances the submodule, rebuilds, and opens a pull request only when the references actually change; the build is deterministic, so a diff means upstream moved.
 
 ```sh
-git submodule update --init                # first time only, populates upstream/angular
+git submodule update --init              # first time only, populates upstream/angular
 pnpm install
-pnpm run extract:angular-update-guide      # read the submodule, rebuild the intermediate JSON
-pnpm run render:angular-update-guide       # rewrite references/ and the generated regions of SKILL.md
+pnpm run build:angular-update-guide      # rewrite references/ and the generated regions of SKILL.md
 pnpm test
 ```
 

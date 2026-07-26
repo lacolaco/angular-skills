@@ -1,7 +1,7 @@
 name: sync-upstream
 
 # angular/angular の Update Guide ソース (adev/src/app/features/update) を追跡し、
-# skills/angular-update-guide/ を再生成する。中間データはコミットしない。
+# skills/angular-update-guide/ を再生成する。中間ファイルは持たない。
 # render は決定論的なので、差分が出た場合は上流が変わったことを意味する
 # (peter-evans/create-pull-request は差分なしのとき何もしない)。
 
@@ -52,8 +52,7 @@ jobs:
       - name: Regenerate skill data
         id: regen
         run: |
-          pnpm run extract:angular-update-guide
-          pnpm run render:angular-update-guide
+          pnpm run build:angular-update-guide
           # The submodule now points at upstream HEAD, which moves whenever
           # angular/angular does — far more often than the Update Guide data
           # changes. Advancing the pointer on its own would open a pull
@@ -73,7 +72,7 @@ jobs:
         if: steps.regen.outputs.changed == 'true'
         id: source
         run: |
-          SHA=$(jq -r '.source.commitSha' data/angular-update-guide/recommendations.json)
+          SHA=$(git -C upstream/angular rev-parse HEAD)
           echo "commit_sha=$SHA" >> "$GITHUB_OUTPUT"
 
       - name: Create Pull Request
