@@ -1,5 +1,7 @@
 # angular-skills
 
+[日本語](./README.ja.md)
+
 Agent skills carrying Angular reference data. The material is generated from [angular/angular](https://github.com/angular/angular) sources, so an agent can read it directly instead of browsing the docs site.
 
 **Unofficial.** This repository is not affiliated with, endorsed by, or supported by Google or the Angular team.
