@@ -46,8 +46,8 @@ data/                          intermediate JSON, committed so upstream diffs ar
 
 ```sh
 pnpm install
-pnpm run extract:github   # fetch upstream at a pinned commit and rebuild the intermediate JSON
-pnpm run render           # rewrite references/ and the generated regions of SKILL.md
+pnpm run extract   # read upstream and rebuild the intermediate JSON
+pnpm run render    # rewrite references/ and the generated regions of SKILL.md
 pnpm test
 ```
 

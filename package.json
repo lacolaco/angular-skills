@@ -4,10 +4,9 @@
   "type": "module",
   "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "extract:local": "tsx tools/main.ts local",
-    "extract:github": "tsx tools/main.ts github",
-    "test": "tsx --test tools/*.test.ts",
-    "render": "tsx tools/render.ts"
+    "extract": "tsx tools/main.ts",
+    "render": "tsx tools/render.ts",
+    "test": "tsx --test tools/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

@@ -35,7 +35,7 @@ jobs:
 
       - name: Fetch upstream and regenerate skill data
         run: |
-          pnpm run extract:github
+          pnpm run extract
           pnpm run render
 
       - run: pnpm exec tsc --noEmit
