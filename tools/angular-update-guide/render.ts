@@ -105,11 +105,14 @@ function renderStep(
   isLatest: boolean,
 ): string {
   const bucketed = classify(data.recommendations, from.number, to.number);
-  const source = `${data.source.repo}@${data.source.commitSha}`;
 
+  // No upstream SHA here. It lives once, in SKILL.md: repeating it in every
+  // reference file would make each one differ whenever angular/angular moves,
+  // even when the guide data is untouched — and the sync workflow decides
+  // whether to open a pull request by diffing exactly these files.
   const parts: string[] = [];
   parts.push(
-    `<update-guide from="${escapeAttr(from.name)}" to="${escapeAttr(to.name)}" source="${escapeAttr(source)}">`,
+    `<update-guide from="${escapeAttr(from.name)}" to="${escapeAttr(to.name)}">`,
   );
   if (isLatest) {
     parts.push('  <unreleased-warning>');

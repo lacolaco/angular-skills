@@ -53,12 +53,12 @@ jobs:
         id: regen
         run: |
           pnpm run build:angular-update-guide
-          # The submodule now points at upstream HEAD, which moves whenever
+          # The submodule points at upstream HEAD, which moves whenever
           # angular/angular does — far more often than the Update Guide data
-          # changes. Advancing the pointer on its own would open a pull
-          # request most days with nothing to review, so the pointer only
-          # travels when regeneration actually produced something different.
-          if git diff --quiet -- skills; then
+          # changes. Only the reference files are compared: SKILL.md carries
+          # the upstream SHA and so differs on every run, which would make
+          # this gate fire every day with nothing to review.
+          if git diff --quiet -- skills/angular-update-guide/references; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"

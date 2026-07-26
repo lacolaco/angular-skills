@@ -1,4 +1,4 @@
-<update-guide from="14.0" to="15.0" source="angular/angular@5ad823139758b4d3a8a021d378b008c3457f8689">
+<update-guide from="14.0" to="15.0">
   <step id="v15 node support" level="Basic" phase="during">
     Make sure that you are using a supported version of node.js before you upgrade your application. Angular v15 supports node.js versions: 14.20.x, 16.13.x and 18.10.x. [Read further](https://v15.angular.io/guide/update-to-version-15#v15-bc-01)
   </step>

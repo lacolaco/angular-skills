@@ -1,4 +1,4 @@
-<update-guide from="6.0" to="7.0" source="angular/angular@5ad823139758b4d3a8a021d378b008c3457f8689">
+<update-guide from="6.0" to="7.0">
   <step id="Renderer" level="Advanced" phase="before">
     Anywhere you use Renderer, now use Renderer2
   </step>

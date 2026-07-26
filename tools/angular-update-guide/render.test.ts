@@ -8,7 +8,7 @@ import {
   type Version,
 } from './render.js';
 
-// Small fabricated version tables — never touch the real data/recommendations.json.
+// Small fabricated version tables — the real upstream data is never read here.
 
 const V6_TO_V8: Version[] = [
   {name: '6.0', number: 600},

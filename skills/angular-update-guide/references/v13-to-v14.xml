@@ -1,4 +1,4 @@
-<update-guide from="13.0" to="14.0" source="angular/angular@5ad823139758b4d3a8a021d378b008c3457f8689">
+<update-guide from="13.0" to="14.0">
   <step id="v14 ng update" level="Basic" phase="during">
     Run `ng update @angular/core@14 @angular/cli@14` which should bring you to version 14 of Angular.
   </step>
