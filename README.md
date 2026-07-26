@@ -39,7 +39,7 @@ The skill carries what changes, not how to change it, so it does its work inside
 
 Reference data is also useful before committing to anything:
 
-> What breaks between Angular 20 and 21 for this codebase? Don't change anything yet — I want to see the list first.
+> What breaks between Angular 20 and 21 for this codebase? Don't change anything yet, just show me the list.
 
 ## Requirements
 
