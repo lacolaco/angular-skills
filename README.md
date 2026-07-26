@@ -29,7 +29,7 @@ Skills land in `.agents/skills/`, and the installer links them into whichever ag
 
 Nothing here depends on the installer. Each skill is a plain directory rooted at `SKILL.md`, so vendoring it by hand works just as well.
 
-## Asking for an upgrade
+## `angular-update-guide`
 
 The skill carries what changes, not how to change it, so it does its work inside whatever you were already going to ask. Nothing needs to name it:
 

@@ -32,7 +32,7 @@ npx skills add lacolaco/angular-skills -s angular-update-guide
 インストーラに依存する部分はありません。
 各スキルは `SKILL.md` を起点とする素のディレクトリなので、手で配置しても同じように動きます。
 
-## 更新を依頼する
+## `angular-update-guide`
 
 このスキルが持つのは「何が変わるか」であって「どう変えるか」ではありません。
 そのため、もともと投げるつもりだった依頼の中で働きます。
