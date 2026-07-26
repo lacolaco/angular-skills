@@ -1,71 +1,71 @@
 # CLAUDE.md
 
-`lacolaco/angular-skills` を扱うときの指示。横断的な規範はホーム配下の CLAUDE.md にあるので、ここにはこのリポジトリ固有の事情だけを書く。
+Instructions for working on `lacolaco/angular-skills`. Only what is specific to this repository; general working norms live elsewhere.
 
-パッケージマネージャは pnpm。Node.js は v22 以降。
+Package manager is pnpm. Node.js v22 or newer.
 
-## 性質と制約
+## What this repository is, and what constrains it
 
-Angular を扱う Agent Skill を配布する公開リポジトリ。公式の `angular/skills` を代替するものではなく、公式スキルがカバーしていない範囲を補う位置づけ。
+A public repository distributing agent skills for Angular. It does not replace the official `angular/skills`; it covers ground those skills leave open.
 
-**`skills/<name>/` のサブツリーだけを切り出して移設できる状態を壊さないこと。** Angular 公式への取り込みを提案する意図があり、命名、MIT ライセンス、ディレクトリ構成はこの制約から決まっている。スキルの成果物が `skills/<name>/` の外に依存を持ったら、その時点で移設できなくなる。
+**Keep each `skills/<name>/` subtree liftable on its own.** There is an intention to propose these for adoption upstream, and the naming, the MIT license, and the directory layout all follow from that. The moment a skill's shipped files depend on anything outside `skills/<name>/`, it can no longer be moved.
 
-## 生成物を手で編集しない
+## Do not hand-edit generated files
 
-次のものは `tools/angular-update-guide/` のビルド出力であり、手で書き換えても次のビルドで消える。
+These are output of the build under `tools/angular-update-guide/`, and a rebuild discards anything written by hand:
 
-- `skills/angular-update-guide/references/*.xml` の全体
-- `skills/angular-update-guide/SKILL.md` のうち `<!-- REFERENCES:START -->` と `<!-- SOURCE:START -->` のマーカーに挟まれた領域
+- all of `skills/angular-update-guide/references/*.xml`
+- the regions of `skills/angular-update-guide/SKILL.md` between the `<!-- REFERENCES:START -->` and `<!-- SOURCE:START -->` markers
 
-SKILL.md のそれ以外の本文は著述物なので、直接編集してよい。出力の形式を変えたいときは `tools/angular-update-guide/render.ts` を直してから再ビルドする。
+The rest of SKILL.md is authored prose and is meant to be edited directly. To change the shape of the output, change `tools/angular-update-guide/render.ts` and rebuild.
 
 ```sh
-git submodule update --init              # 初回のみ
+git submodule update --init              # first time only
 pnpm install
 pnpm run build:angular-update-guide
 ```
 
-## 完了条件
+## Definition of done
 
-変更を終える前に次を全て通すこと。
+All of these pass before a change is finished:
 
 ```sh
 pnpm exec tsc --noEmit
 pnpm test
-pnpm run build:angular-update-guide      # 実行後に git status がクリーンなら決定論的
+pnpm run build:angular-update-guide      # deterministic if git status is clean afterwards
 ```
 
-生成物の形式を変えた場合は、これに加えて旧版との突き合わせを行う。git 履歴から旧版を取り出し、変えたつもりの属性だけを除いた行列が順序込みで一致することを確認する。項目数 (現在 378) が変わっていないことも見る。**目視で済ませない。**
+If the shape of the generated output changed, add a comparison against the previous version. Take the old files out of git history, strip only the attribute you meant to change, and confirm the result matches the new files in order, not just as a set. Confirm the item count (currently 378) is unchanged. **Reading the diff by eye does not count.**
 
-## 踏みやすい罠
+## Traps this repository sets
 
-- **編集は先にコミットしてから検証する。** `git checkout -- <path>` やビルドの実行が、未コミットの手編集を消す。このリポジトリで実際に 2 回起きている。
-- **`upstream/angular` を触ったら必ず元のピンに戻す。** submodule のピンが動いたまま再ビルドすると、無関係な差分が生成物に混ざる。
-- **新規ファイルは `git diff` に映らない。** 同期ワークフローのゲートが `git status --porcelain` を使っているのはこのため。ゲートを直すときは「差分なし」だけでなく「上流 SHA だけ動いた」「新規ファイルが増えた」の 2 ケースでも試す。
-- **`level` は抽出しているが出力しない。** `extract.ts` の検証は上流の `ApplicationComplexity` enum が変わったときに気づくための番人であり、未使用のデッドコードではない。消さないこと。
+- **Commit an edit before running anything that can revert it.** `git checkout -- <path>` and the build both destroy uncommitted hand edits. This has already cost work twice.
+- **Restore the submodule pin after touching `upstream/angular`.** Rebuilding while the pin has moved mixes unrelated upstream churn into the output.
+- **A new file does not appear in `git diff`.** That is why the sync workflow gates on `git status --porcelain`. When changing that gate, exercise the cases it exists for: upstream SHA moved but data did not, and a new reference file appeared. Not just the no-change case.
+- **`level` is extracted but never rendered.** The validation in `extract.ts` is a canary that fails the build if upstream restructures its `ApplicationComplexity` enum. It is not dead code. Leave it.
 
-## 変えてはいけない設計判断
+## Decisions that should not be quietly reversed
 
-理由ごと README の「設計上の選択」に書いてある。変えるなら README も一緒に直す。
+Each is recorded with its reasoning under "Opinionated choices" in the README. Changing one means changing the README too.
 
-- 複雑度レベル (`Basic` / `Medium` / `Advanced`) を生成物に出さない。人間に一度に出す量の目盛りであってエージェントには不要であり、残すと項目を落とす根拠に使われる。
-- オプション条件 (`material` / `ngUpgrade` / `windows`) は属性として残し、事前に絞り込まない。該当判定はエージェントがプロジェクトを読んで行う。
-- v6 より前からの更新は対象外。上流も同じ境界を引いている。
-- SKILL.md は「何が変わるか」だけを持ち、更新の実行手順を持たない。
+- The complexity level (`Basic` / `Medium` / `Advanced`) is not emitted. It is a dial for how much to put in front of a human at once, which an agent reading the whole file does not need, and keeping it only supplies grounds for dropping items.
+- Option conditions (`material` / `ngUpgrade` / `windows`) stay on the items and are not pre-filtered. Which ones apply is decided by reading the target project.
+- Updates from before v6 are out of scope. Upstream draws the same boundary.
+- SKILL.md carries what changes, never how to carry out the update.
 
-## 文章の規範
+## Writing
 
-- **em ダッシュ (U+2014) を使わない。** コロン、セミコロン、読点、括弧、二文に分ける、のいずれかで書く。ハイフン (`-`) は対象外で、`major-to-major` のような複合語では普通に使う。
-- **`skills` CLI 自身の仕様を説明しない。** インストール先のディレクトリやロックファイルの扱いは上流のドキュメントの領分。
-- **1 つのスキルの性質をリポジトリ全体の説明として書かない。** スキル固有の内容は `## Usage` の下にスキル名の見出し (`### <name> : 短い説明`) を立ててその中に置く。
-- README の引用ブロックは利用者が実際に打つ依頼を模したもの。書き言葉に寄せない。
-- README.ja.md は `tech-writing` スキルの規範に従う (敬体、一文ごとに改行、並列に中黒を使わない、用語と説明の箇条書きは全角コロン)。英語版の直訳にしない。
+- **No em dash (U+2014).** Use a colon, a semicolon, a comma, parentheses, or a second sentence. Hyphens are unaffected; compounds like `major-to-major` are fine.
+- **Do not document the `skills` CLI itself.** Where it puts files and what it writes to its lockfile belong to its own documentation.
+- **Do not state one skill's properties as the repository's.** Per-skill content goes under `## Usage`, in a heading named after the skill (`### <name> : short description`).
+- Block quotes in the README stand in for requests a person would actually type. Keep them spoken, not written.
+- README.ja.md follows the `tech-writing` skill's norms for Japanese prose. It is not a translation of the English one, and should not read like one.
 
-## 決定の典拠
+## Where the reasoning is recorded
 
-設計判断とその根拠、却下した選択肢は Linear に記録してある。ここに書き写さない。
+Design decisions, their rationale, and the options that were rejected live in Linear. Do not copy them here.
 
-- 判断のマップ: [LACO-232](https://linear.app/lacolaco/issue/LACO-232)
-- 実装ツリー: [LACO-243](https://linear.app/lacolaco/issue/LACO-243)
+- Decision map: [LACO-232](https://linear.app/lacolaco/issue/LACO-232)
+- Implementation tree: [LACO-243](https://linear.app/lacolaco/issue/LACO-243)
 
-各チケットの解決コメントに決定と根拠が入っている。マップにない論点が出たら、独断で決めずマップ側に差し戻す。
+The resolving comment on each issue holds the decision and why. If a question comes up that the map does not cover, raise it there rather than settling it alone.
