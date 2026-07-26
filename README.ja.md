@@ -20,7 +20,7 @@ npx skills add lacolaco/angular-skills
 # ユーザー全体に入れる
 npx skills add lacolaco/angular-skills -g
 
-# このスキルだけ入れる
+# スキルを 1 つだけ入れる
 npx skills add lacolaco/angular-skills -s angular-update-guide
 ```
 

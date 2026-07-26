@@ -19,7 +19,7 @@ npx skills add lacolaco/angular-skills
 # Or globally for your user
 npx skills add lacolaco/angular-skills -g
 
-# Only this skill
+# Just one of the skills
 npx skills add lacolaco/angular-skills -s angular-update-guide
 ```
 
