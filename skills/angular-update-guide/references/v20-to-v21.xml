@@ -5,6 +5,9 @@
   <step id="update @angular/material" phase="during" material="true">
     Run `ng update @angular/material@21`.
   </step>
+  <step id="21.0.0-cdk-overlay-top-layer-stacking" phase="during" material="true">
+    CDK overlays can now render in the browser's native top layer, causing elements that previously appeared above Material overlays via `z-index` to render beneath them. You can restore the previous behavior by providing `OVERLAY_DEFAULT_CONFIG` from `@angular/cdk/overlay` with the value `{usePopover: false}`.
+  </step>
   <step id="21.0.0-update-signal-input-access-in-custom-elements" phase="during">
     When using signal inputs with Angular custom elements, update property access to be direct (`elementRef.newInput`) instead of a function call (`elementRef.newInput()`) to align with the behavior of decorator-based inputs.
   </step>
