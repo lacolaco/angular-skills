@@ -50,4 +50,7 @@
   <step id="19.0.0-update-fakeasync-to-flush-pending-timers" phase="during">
     `fakeAsync` will flush pending timers by default. For tests that require the previous behavior, explicitly pass `{flush: false}` in the options parameter.
   </step>
+  <step id="19.0.0-remove-allow-signal-writes" phase="during">
+    Remove the `allowSignalWrites` option from `effect()` calls. The option is deprecated and no longer required, as signal writes inside effects are allowed by default.
+  </step>
 </update-guide>

@@ -12,7 +12,7 @@
     In the application's project directory, run `ng update @angular/core@17 @angular/cli@17` to update your application to Angular v17.
   </step>
   <step id="update @angular/material" phase="during" material="true">
-    Run `ng update @angular/material@17`.
+    Run `ng update @angular/material@17`. If your application still uses legacy Angular Material components (deprecated in v15 and removed in v17), run `ng generate @angular/material:mdc-migration` before upgrading to Material v17. Read the [MDC migration guide](https://v17.material.angular.dev/guide/mdc-migration) for detailed instructions.
   </step>
   <step id="v17 style removal" phase="during">
     Angular now automatically removes styles of destroyed components, which may impact your existing apps in cases you rely on leaked styles. To change this update the value of the `REMOVE_STYLES_ON_COMPONENT_DESTROY` provider to `false`.
