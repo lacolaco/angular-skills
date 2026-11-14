@@ -60,7 +60,7 @@
     Elements with multiple matching selectors now throw a compile-time error. Ensure your components use unique selectors and review any directives that might have conflicting selectors.
   </step>
   <step id="22.0.0-component-onpush-default" phase="during">
-    Components with no `changeDetection` property defined are now `OnPush` by default. To maintain `Eager` (the previous default) change detection, explicitly set `changeDetection: ChangeDetectionStrategy.Eager` in your component decorator.
+    Components with no `changeDetection` property defined are now `OnPush` by default. `ng update` keeps your existing components on the previous behavior by adding `changeDetection: ChangeDetectionStrategy.Eager` to every component that has no `changeDetection` property. It also replaces the deprecated `ChangeDetectionStrategy.Default` with `ChangeDetectionStrategy.Eager`. If you update without running `ng update`, set `changeDetection: ChangeDetectionStrategy.Eager` yourself where you need the previous behavior.
   </step>
   <step id="22.0.0-remove-check-no-changes" phase="during">
     `ChangeDetectorRef.checkNoChanges()` has been removed. In tests, use `fixture.detectChanges()` instead or verify your component state through other means.
